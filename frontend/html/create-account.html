@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="../css/create-account.css">
+</head>
+
+<body>
+    <img src="../../images/TradeAnchorLogo.png">
+
+    <form>
+        <section>
+            <select id="role" name="role" required>
+                <option value="">-- Select Role --</option>
+                <option value="bank">Bank</option>
+                <option value="company">Company</option>
+                <option value="shipper">Shipper</option>
+            </select>
+
+        </section>
+
+        <section>
+            <input placeholder="Name" type="text" id="name" name="name" required>
+        </section>
+
+        <section>
+            <input placeholder="Password" type="password" id="password" name="password" required>
+        </section>
+
+        <section>
+            <input placeholder="Confirm Password " type="password" id="confirmPassword" name="confirmPassword" required>
+            <p class="password-mismatch-message">Must be same as password</p>
+        </section>
+
+        <button type="submit">Create</button>
+    </form>
+
+    <script src="../javascript/create-account.js"></script>
+</html>

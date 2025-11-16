@@ -2,9 +2,21 @@ loginForm = document.querySelector('form');
 
 loginForm.addEventListener("submit", loginFormHandler);
 
-async function loginFormHandler() {
-    const username = document.querySelector('#username').value;
-    const password = document.querySelector('#password').value;
+const usernameE = document.querySelector('#username');
+const passwordE = document.querySelector('#password');
+
+usernameE.addEventListener('input', retry);
+passwordE.addEventListener('input', retry);
+
+function retry() {
+    usernameE.classList.remove('login-fail');
+    passwordE.classList.remove('login-fail');
+    document.querySelector('.login-fail-message').style.display = 'none';
+}
+async function loginFormHandler(event) {
+    event.preventDefault();
+    const username = usernameE.value;
+    const password = passwordE.value;
 
     const response = await fetch('/login', {
         method: 'POST',
@@ -15,27 +27,20 @@ async function loginFormHandler() {
     });
 
     if (response.ok) {
-        if (response.userType === 'bank') {
+        const data = await response.json();
+        if (data.userType === 'bank') {
             window.location.replace('/bank-dashboard.html');
-        } else if (response.userType === 'company') {
+        } else if (data.userType === 'company') {
             window.location.replace('/company-dashboard.html');
         } else {
             window.location.replace('/shipper-dashboard.html');
+            //window.location.replace(url) redirects to a new page without adding the current page to the browser history.
+            //window.location.href = url does the same thing but adds the current page to the browser history. ser can press Back → goes back to login
         }
     } else {
-        username.classList.add('login-fail');
-        password.classList.add('login-fail');
+        usernameE.classList.add('login-fail');
+        passwordE.classList.add('login-fail');
         document.querySelector('.login-fail-message').style.display = 'block';
-        username.addEventListener('input', () => {
-            username.classList.remove('login-fail');
-            password.classList.remove('login-fail');
-            document.querySelector('.login-fail-message').style.display = 'none';
-        });
-        password.addEventListener('input', () => {
-            username.classList.remove('login-fail');
-            password.classList.remove('login-fail');
-            document.querySelector('.login-fail-message').style.display = 'none';
-        });
     }
 }
 

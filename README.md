@@ -4,8 +4,8 @@ This project is a complete prototype of an international trade finance workflow 
 
 The project models a realistic end-to-end trade process while remaining simple enough for learning, academic use, and interviews.
 
-**Project Overview
-**
+**Project Overview**
+
 The system tracks the major steps of a cross-border trade:
 
   Company requests a Letter of Credit.
@@ -26,8 +26,8 @@ The system tracks the major steps of a cross-border trade:
   
   This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
 
-**On-Chain Architecture
-**
+**On-Chain Architecture**
+
 The blockchain layer contains four core smart contracts:
 
   IdentityRegistry
@@ -42,8 +42,8 @@ The blockchain layer contains four core smart contracts:
   TradeFinanceManager
   Validates LC and B/L, triggers payment, transfers B/L ownership, and authorizes release of goods.
 
-**Off-Chain Architecture
-**
+**Off-Chain Architecture**
+
 The web application is built using:
 
   -- Spring Boot for backend services and REST APIs.

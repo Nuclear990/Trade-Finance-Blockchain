@@ -1,0 +1,56 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+}
+select {
+    width: 322px;
+    height: 43px;
+    margin-bottom: 10px;
+    border: 1.2px solid #051844;
+    border-radius: 5px;
+    font-size: 17px;
+    background-color: #d5e0fa;
+    padding: 10px;
+}
+input {
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    width: 300px;
+    height: 23px;
+    border: 1.2px solid #051844;
+    font-size: 17px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #051844;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 30px;
+    width: 325px
+}
+
+img {
+    width: 250px;
+    height: auto;
+    margin-bottom: 42px;
+    border-radius: 50%;
+}
+
+.password-mismatch-message {
+    color: rgb(218, 13, 13);
+    display: none;
+    margin: 0 0 10px 0;
+}
+
+.password-mismatch-input {
+    border-color: rgb(218, 13, 13);
+}

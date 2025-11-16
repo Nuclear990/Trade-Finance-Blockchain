@@ -58,13 +58,13 @@ The web application is built using:
 
 ## System Actors
 
-  ### Bank
+  * Bank
     Issues LC, verifies B/L, releases or receives payments.
   
-  ### Company
+  * Company
     Acts as importer or exporter depending on the transaction.
   
-  ### Shipper
+  * Shipper
     Issues B/L and releases the goods to the importer.
 
 ## Key Features

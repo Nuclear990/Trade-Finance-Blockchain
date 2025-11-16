@@ -1,9 +1,9 @@
-#Trade Finance Blockchain — Hyperledger Besu (IBFT) Prototype
+# Trade Finance Blockchain — Hyperledger Besu (IBFT) Prototype
 
 This project is a complete prototype of an international trade finance workflow built on a private blockchain network using Hyperledger Besu with IBFT consensus. It demonstrates how blockchain can digitize and automate the movement of key trade documents such as the Letter of Credit (LC) and Bill of Lading (B/L), while coordinating actions between banks, companies, and shippers.
 
 
-##**Project Overview**
+## **Project Overview**
 
 The system tracks the major steps of a cross-border trade:
 

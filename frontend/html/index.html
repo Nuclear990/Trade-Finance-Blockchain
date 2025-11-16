@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeAnchor-Login</title>
+    <style>
+        body {
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background-color:rgb(3, 3, 81);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-weight: 400;
+            font-size: 50px;
+        }
+        input{
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+            height: 23px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(45, 147, 255);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            width:320px
+        }
+    </style>
+</head>
+
+</html>
+
+<body>
+    <h1>Welcome to TradeAnchor</h1>
+    <img src="/home/catpuccino/Desktop/TradeAnchor/Trade-Finance-Blockchain/images/TradeAnchorLogo.png"> 
+
+    <form action="/login" method="post">    <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
+
+        <section>
+            <input placeholder="Username" type="text" id="username" name="username" required>  <!-- 'required' attribute ensures the field must be filled before submission. -->
+        </section>
+
+        <section>
+            <input placeholder="Password" type="password" id="password" name="password" required>   
+            <!-- name="username" and name="password" are what your backend will receive as keys. If you don’t name your inputs, your server receives nothing-->
+        </section>        
+
+            <button type="submit">Login</button>
+    </form>
+
+</body>

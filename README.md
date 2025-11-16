@@ -7,13 +7,13 @@ This project is a complete prototype of an international trade finance workflow 
 
 The system tracks the major steps of a cross-border trade:
 
-  * Company requests a Letter of Credit.
+  1. Company requests a Letter of Credit.
   
-  * Bank issues the LC as an ERC-721 token.
+  2. Bank issues the LC as an ERC-721 token.
   
-  * Shipper issues the Bill of Lading as an ERC-721 token.
+  3. Shipper issues the Bill of Lading as an ERC-721 token.
   
-  * Exporter submits the B/L to the bank.
+  4. Exporter submits the B/L to the bank.
   
   * Bank verifies the B/L against LC conditions.
   
@@ -23,7 +23,7 @@ The system tracks the major steps of a cross-border trade:
   
   * Importer presents the B/L to the shipper to receive goods.
   
-  * This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
+This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
 
 
 ## On-Chain Architecture
@@ -66,8 +66,6 @@ The web application is built using:
   
   ### Shipper
     Issues B/L and releases the goods to the importer.
-    Roles for a company are determined per transaction instead of being tied permanently to the entity.
-
 
 ## Key Features
 

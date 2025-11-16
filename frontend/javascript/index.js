@@ -29,11 +29,11 @@ async function loginFormHandler(event) {
     if (response.ok) {
         const data = await response.json();
         if (data.userType === 'bank') {
-            window.location.replace('/bank-dashboard.html');
+            window.location.replace('bank-dashboard.html');
         } else if (data.userType === 'company') {
-            window.location.replace('/company-dashboard.html');
+            window.location.replace('company-dashboard.html');
         } else {
-            window.location.replace('/shipper-dashboard.html');
+            window.location.replace('shipper-dashboard.html');
             //window.location.replace(url) redirects to a new page without adding the current page to the browser history.
             //window.location.href = url does the same thing but adds the current page to the browser history. ser can press Back → goes back to login
         }
@@ -46,3 +46,4 @@ async function loginFormHandler(event) {
 
 
 // Backend /login api should have: response.ok = true/false and response.userType = 'bank'/'company'/'shipper'
+//change where to redirect according to backend

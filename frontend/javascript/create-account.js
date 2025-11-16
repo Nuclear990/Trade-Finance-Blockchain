@@ -33,10 +33,11 @@ async function createFormHandler(event) {
     if (response.ok) {
         const data = await response.json();
         alert(`Account created successfully as ${role}.\nYour Username is ${data.username}`);
-        document.location.replace('/login');
+        window.location.replace('index.html')
     } else {
         alert('Failed to create account.');
     }
 }
 
 //backend /api/users/create should return response.ok=true/false and response.username on success
+//change where to redirect according to backend

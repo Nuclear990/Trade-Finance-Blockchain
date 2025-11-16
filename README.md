@@ -2,7 +2,6 @@
 
 This project is a complete prototype of an international trade finance workflow built on a private blockchain network using Hyperledger Besu with IBFT consensus. It demonstrates how blockchain can digitize and automate the movement of key trade documents such as the Letter of Credit (LC) and Bill of Lading (B/L), while coordinating actions between banks, companies, and shippers.
 
-The project models a realistic end-to-end trade process while remaining simple enough for learning, academic use, and interviews.
 
 **Project Overview**
 
@@ -26,6 +25,7 @@ The system tracks the major steps of a cross-border trade:
   
   This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
 
+
 **On-Chain Architecture**
 
 The blockchain layer contains four core smart contracts:
@@ -42,6 +42,7 @@ The blockchain layer contains four core smart contracts:
   TradeFinanceManager
   Validates LC and B/L, triggers payment, transfers B/L ownership, and authorizes release of goods.
 
+
 **Off-Chain Architecture**
 
 The web application is built using:
@@ -54,6 +55,7 @@ The web application is built using:
   
   Off-chain tables mirror key on-chain data such as LC details, B/L details, participant information, balances, and logs to provide cleaner UI dashboards and faster lookups.
 
+
 **System Actors**
 
   **Bank**
@@ -65,6 +67,7 @@ The web application is built using:
   **Shipper**
     Issues B/L and releases the goods to the importer.
     Roles for a company are determined per transaction instead of being tied permanently to the entity.
+
 
 **Key Features**
 

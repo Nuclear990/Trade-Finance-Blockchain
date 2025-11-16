@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TradeAnchor-Login</title>
     <link rel="stylesheet" href="../css/index.css">
+    <style>
+        
+    </style>
 </head>
-
-</html>
 
 <body>
     <img src="../../images/TradeAnchorLogo.png">
 
-    <form action="/login" method="post">
+    <form>
         <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
 
         <section>
@@ -24,9 +25,15 @@
         <section>
             <input placeholder="Password" type="password" id="password" name="password" required>
             <!-- name="username" and name="password" are what your backend will receive as keys. If you don’t name your inputs, your server receives nothing-->
+            <p class="login-fail-message">Invalid username or password</p>
         </section>
 
         <button type="submit">Login</button>
     </form>
 
+    <hr> <!--horizontal rule-->
+
+    <a href="CreateAccount.html">Create new account</a>
 </body>
+
+</html>

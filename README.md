@@ -15,13 +15,13 @@ The system tracks the major steps of a cross-border trade:
   
   4. Exporter submits the B/L to the bank.
   
-  * Bank verifies the B/L against LC conditions.
+  5. Bank verifies the B/L against LC conditions.
   
-  * Smart contract automatically executes payment using Ether.
+  6. Smart contract automatically executes payment using Ether.
   
-  * Ownership of the B/L token transfers to the importer.
+  7. Ownership of the B/L token transfers to the importer.
   
-  * Importer presents the B/L to the shipper to receive goods.
+  8. Importer presents the B/L to the shipper to receive goods.
   
 This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
 

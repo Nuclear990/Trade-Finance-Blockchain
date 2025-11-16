@@ -1,0 +1,18 @@
+Used Ethers.js in frontend rather than Web3.js - Ethers is : Clean, minimal, predictable interaction with smart contracts.
+
+
+Why Off-Chain Mirrors Are Needed
+
+	Even though LC and B/L exist on the blockchain as NFTs, the system still maintains off-chain database tables as mirrors to make the application usable, fast, and developer-	friendly. On-chain data is the source of truth, but it’s slow to query, hard to index, and expensive to search. The off-chain tables provide a cached representation of LC, B/L, users, goods, and transactions so the backend can:
+
+		Quickly list and filter records
+
+		Render dashboards without hitting the blockchain every time
+
+		Keep role-based access and login separate from blockchain identities
+
+		Support features like sorting, searching, pagination, and auditing
+
+		Store extra UI/metadata that doesn’t belong on-chain
+
+	The blockchain stores only the critical business logic and validation, while the database stores everything needed to run a clean web application.

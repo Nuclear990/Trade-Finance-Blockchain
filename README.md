@@ -26,42 +26,42 @@ The system tracks the major steps of a cross-border trade:
   This ensures that documents cannot be forged, conditions are enforced by smart contracts, and all activity is transparent and auditable.
 
 
-##**On-Chain Architecture**
+## On-Chain Architecture
 
 The blockchain layer contains four core smart contracts:
 
-  IdentityRegistry
+  **IdentityRegistry**
   Stores authorized participants: banks, companies, and shippers.
   
-  LCToken (ERC-721)
+  **LCToken (ERC-721)**
   Represents the Letter of Credit. Stores applicant (importer), beneficiary (exporter), LC amount, and terms.
   
-  BLToken (ERC-721)
+  **BLToken (ERC-721)**
   Represents the Bill of Lading. Stores shipper, exporter, importer, and goods-related metadata.
   
-  TradeFinanceManager
+  **TradeFinanceManager**
   Validates LC and B/L, triggers payment, transfers B/L ownership, and authorizes release of goods.
 
 
-##**Off-Chain Architecture**
+## Off-Chain Architecture
 
 The web application is built using:
 
-  -- Spring Boot for backend services and REST APIs.
-  -- Web3j for interacting with the Besu nodes and smart contracts.
-  -- PostgreSQL for local persistence and fast querying.
-  -- HTML, CSS, and JavaScript for front-end dashboards.
-  -- Ethers.js for wallet interactions.
+  -- **Spring Boot** for backend services and REST APIs.
+  -- **Web3j** for interacting with the Besu nodes and smart contracts.
+  -- **PostgreSQL** for local persistence and fast querying.
+  -- **HTML, CSS, and JavaScript** for front-end dashboards.
+  -- **Ethers.js** for wallet interactions.
   
   Off-chain tables mirror key on-chain data such as LC details, B/L details, participant information, balances, and logs to provide cleaner UI dashboards and faster lookups.
 
 
-**System Actors**
+## System Actors
 
-  ###**Bank**
+  **Bank**
     Issues LC, verifies B/L, releases or receives payments.
   
-  ###**Company**
+  ### **Company**
     Acts as importer or exporter depending on the transaction.
   
   ###**Shipper**
@@ -69,7 +69,7 @@ The web application is built using:
     Roles for a company are determined per transaction instead of being tied permanently to the entity.
 
 
-##**Key Features**
+## Key Features
 
   Private blockchain network using IBFT consensus.
   

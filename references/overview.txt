@@ -1,0 +1,120 @@
+Goal - A private blockchain prototype for handling international trade finance.
+
+Actors - Bank, Company (importer/exporter), shipper
+
+Documents - Letter of Credit, Bill of Lading
+
+Business Flow - 
+	
+	Importer requests LC → your frontend form.
+
+	Bank approves → backend calls LCToken.mint.
+
+	Exporter ships goods.
+
+	Shipper issues B/L → BLToken.mint.
+
+	Exporter → ExporterBank → ImporterBank → (you simulate this with role-based buttons).
+
+	ImporterBank calls validateBL() in TradeFinanceManager.
+
+	Contract automatically triggers:
+
+		Ether.transfer(ImporterBank → ExporterBank)
+
+		Transfers ownership of B/L NFT to importer
+
+	Importer gives B/L NFT to shipper → unlock goods.
+
+Functionalities - 
+	
+	Bank 
+		ON-CHAIN (smart contract) 
+			issue LC 
+			verify B/L against LC 
+			release payment (token transfer) 
+			transfer B/L to importer 
+			receive B/L from exporter bank 
+			OFF-CHAIN (backend) 
+			maintain accounts 
+			maintain balances logs/history UI 
+	
+	Company 
+		ON-CHAIN 
+			request LC 
+			confirm receipt of B/L 
+			acknowledge goods received 
+			
+			handover goods (trigger shipper action) 
+			receive B/L from shipper 
+			submit B/L to exporter bank 
+		
+		OFF-CHAIN 
+			deposit money (your backend simulates wallet balance) 
+			
+			receive payment (backend updates “balance”) 
+			
+			view logs 
+	
+	Shipper 
+		ON-CHAIN 
+			issue B/L transfer B/L to exporter 
+			release goods to importer 
+		
+		OFF-CHAIN 
+			logs
+
+
+Technology stack - 
+	Blockchain - Hyperledger Besu with IBFT consensus
+	Smart Contracts - Solidity	
+	Frontend - HTML, CSS, JS, Ethers.js
+	Backend - SpringBoot, Web3.js 
+	Database - PostgreSQL
+	API - REST API
+	
+Tokens - 
+	B/L - NFT - ERC721
+	LC - NFT - ERC721
+
+Currency - Ether 
+Goods - represented by a Struct
+Identity - on-chain registry
+
+Smart Contracts -
+
+	A. IdentityRegistry - Stores who is importer/exporter/bank/shipper.
+
+	B. LCToken (ERC721) - Stores LC info: applicant (importer), beneficiary (exporter), amount, conditions.
+			      Only bank can mint.
+
+	C. BLToken (ERC721) - Stores: shipper, exporter, importer, goods description, shipment status.
+			      Only shipper can mint.
+
+	D. TradeFinanceManager - Checks conditions like:
+					If ImporterBank receives valid B/L → release payment
+					If Importer gives B/L to Shipper → release goods
+      				It calls Ether transfer functions for money flow.
+      				
+      				
+Frontend - Dashboards - Company, Bank, Shipper
+
+Database Tables - 
+	1. users
+		Holds company, bank officers, shipper staff.
+		Your backend uses this for login/roles.
+
+	2. accounts
+		Simulated wallet balances off-chain.
+
+	3. lc_records
+		Local mirror of LC NFT metadata.
+
+	4. bl_records
+		Local mirror of B/L NFT metadata.
+
+	5. goods_records
+		Stores goods info (description, quantity, status).
+
+	6. transactions_log
+		Every on-chain + off-chain action for audit.

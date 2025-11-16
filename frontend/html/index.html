@@ -8,7 +8,7 @@
     <style>
         body {
             font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            background-color:rgb(3, 3, 81);
+            background-color:white;
             color: white;
             display: flex;
             flex-direction: column;
@@ -29,11 +29,12 @@
             border-radius: 5px;
             width: 300px;
             height: 23px;
+            border: 1.2px solid #051844;
         }
 
         button {
             padding: 10px 20px;
-            background-color: rgb(45, 147, 255);
+            background-color: #051844;
             color: white;
             border: none;
             border-radius: 5px;
@@ -42,15 +43,20 @@
             margin-top: 15px;
             width:320px
         }
+        img {
+            width: 250px;
+            height: auto;
+            margin-bottom: 40px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
 </html>
 
 <body>
-    <h1>Welcome to TradeAnchor</h1>
-    <img src="/home/catpuccino/Desktop/TradeAnchor/Trade-Finance-Blockchain/images/TradeAnchorLogo.png"> 
-
+    <img src="../../images/TradeAnchorLogo.png"> 
+    
     <form action="/login" method="post">    <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
 
         <section>

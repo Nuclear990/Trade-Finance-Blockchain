@@ -33,3 +33,7 @@ Off-chain = anything done outside the blockchain.
 		editable
 		can connect to external systems
 		can hide private data
+
+
+		hhhh
+		

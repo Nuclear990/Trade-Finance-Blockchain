@@ -11,20 +11,22 @@
 </html>
 
 <body>
-    <img src="../../images/TradeAnchorLogo.png"> 
+    <img src="../../images/TradeAnchorLogo.png">
 
-    <form action="/login" method="post">    <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
+    <form action="/login" method="post">
+        <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
 
         <section>
-            <input placeholder="Username" type="text" id="username" name="username" required>  <!-- 'required' attribute ensures the field must be filled before submission. -->
+            <input placeholder="Username" type="text" id="username" name="username" required>
+            <!-- 'required' attribute ensures the field must be filled before submission. -->
         </section>
 
         <section>
-            <input placeholder="Password" type="password" id="password" name="password" required>   
+            <input placeholder="Password" type="password" id="password" name="password" required>
             <!-- name="username" and name="password" are what your backend will receive as keys. If you don’t name your inputs, your server receives nothing-->
-        </section>        
+        </section>
 
-            <button type="submit">Login</button>
+        <button type="submit">Login</button>
     </form>
 
 </body>

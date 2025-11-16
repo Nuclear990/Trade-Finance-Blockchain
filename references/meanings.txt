@@ -1,0 +1,35 @@
+A TOKEN in blockchain is a digital asset built on an existing blockchain (such as Ethereum) that represents value, ownership, or access rights to a specific product or service. Unlike a coin (like Bitcoin or Ether), which has its own independent blockchain and functions as a native currency, a token leverages the underlying technology and smart contracts of an existing network. 
+
+On-chain = inside the blockchain itself.
+
+	Anything on-chain is:
+		stored in smart contract storage
+		executed by smart contracts
+		validated by consensus
+		immutable (can’t be edited)
+		expensive / slow
+		visible to all participants
+		deterministic (no randomness, no external API calls)
+
+	If you write a Solidity function, deploy it on Besu, and call it → that’s on-chain.
+	
+Off-chain = anything done outside the blockchain.
+
+	This includes:
+		SpringBoot backend
+		database
+		front-end UI
+		API endpoints
+		normal business logic
+		logs
+		calculations
+		authentication
+		user actions that don’t need blockchain security
+
+	Off-chain is:
+		faster
+		cheaper
+		flexible
+		editable
+		can connect to external systems
+		can hide private data

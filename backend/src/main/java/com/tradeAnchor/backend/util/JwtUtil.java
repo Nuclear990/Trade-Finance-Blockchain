@@ -12,11 +12,11 @@ public class JwtUtil {
     private String keyString = "-i--want--another--internship--very--fast-";
     private SecretKey key = Keys.hmacShaKeyFor(keyString.getBytes());
 
-    public String generateAccessToken(String username, String role){
+    public String generateAccessToken(String username, String userType){
         long expiration_time = 1000 * 60 * 5; // 5 mins
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role)
+                .claim("userType", userType)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration_time))
                 .claim("type", "access")
@@ -37,6 +37,6 @@ public class JwtUtil {
     }
 
     public String extractRole(String accessToken){
-        return extractAllClaims(accessToken).get("role").toString();
+        return extractAllClaims(accessToken).get("userType").toString();
     }
 }

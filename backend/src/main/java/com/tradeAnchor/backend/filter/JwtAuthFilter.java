@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
 
                 String username = claims.getSubject();
-                String role = claims.get("role", String.class);
+                String role = claims.get("userType", String.class);
 
                 var authority = new SimpleGrantedAuthority(role);
 

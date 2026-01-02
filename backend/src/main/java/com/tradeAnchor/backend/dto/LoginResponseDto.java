@@ -3,11 +3,13 @@ package com.tradeAnchor.backend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshDto {
-    private String username;
-    private String UserType;
+@Getter
+@Setter
+public class LoginResponseDto {
+    String accessToken;
+    String userType;
 }

@@ -23,17 +23,17 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
-    private String role;
+    private String userType;
 
-    public Users(String username, String password, String role) {
+    public Users(String username, String password, String userType) {
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.userType = userType;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> role);
+        return List.of(() -> userType);
     }
 
     @Override

@@ -22,14 +22,14 @@ public class RefreshToken {
     private Boolean revoked;
     private Instant iat; //issue at
     private Instant exp;   // initially - natural exp date. Once used - date at which retention period ends, for cleaner cron job.
-    private String role;
+    private String userType;
 
-    public RefreshToken(String username, String token, String role){
+    public RefreshToken(String username, String token, String userType){
         this.username = username;
         this.token = token;
         this.revoked = false;
         this.iat = Instant.now();
         this.exp = Instant.now().plusSeconds(60L*60*24*30);  //one month
-        this.role = role;
+        this.userType = userType;
     }
 }

@@ -33,10 +33,10 @@ The blockchain layer contains four core smart contracts:
   **IdentityRegistry**
   Stores authorized participants: banks, companies, and shippers.
   
-  **LCToken (ERC-721)**
+  **LcToken (ERC-721)**
   Represents the Letter of Credit. Stores applicant (importer), beneficiary (exporter), LC amount, and terms.
   
-  **BLToken (ERC-721)**
+  **BlToken (ERC-721)**
   Represents the Bill of Lading. Stores shipper, exporter, importer, and goods-related metadata.
   
   **TradeFinanceManager**

@@ -7,13 +7,13 @@ This project is a complete prototype of an international trade finance workflow 
 
 The system tracks the major steps of a cross-border trade:
 
-  1. Company requests a Letter of Credit.
+  1. Importer Company requests a Letter of Credit from their Bank.
   
   2. Bank issues the LC as an ERC-721 token.
   
-  3. Shipper issues the Bill of Lading as an ERC-721 token.
+  3. Shipper issues the Bill of Lading as an ERC-721 token to Exporter.
   
-  4. Exporter submits the B/L to the bank.
+  4. Exporter submits the B/L to their Bank.
   
   5. Bank verifies the B/L against LC conditions.
   

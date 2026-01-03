@@ -118,3 +118,30 @@ Database Tables -
 
 	6. transactions_log
 		Every on-chain + off-chain action for audit.
+
+
+LC (Letter of Credit)
+	States:
+		REQUESTED (off-chain only)
+		ISSUED (NFT minted)
+		UTILIZED (BL validated, payment released)
+		CLOSED
+Who can move state?
+Bank only.
+
+BL (Bill of Lading)
+	States:
+		ISSUED
+		SUBMITTED_TO_BANK
+		ACCEPTED
+		TRANSFERRED_TO_IMPORTER
+		SURRENDERED_TO_SHIPPER
+Who controls transitions?
+Shipper → Exporter → Banks → Importer → Shipper
+
+Goods
+	States:
+		CREATED
+		IN_TRANSIT
+		RELEASED
+Goods never move money. They only gate actions.

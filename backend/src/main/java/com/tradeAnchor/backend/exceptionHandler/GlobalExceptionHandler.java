@@ -25,13 +25,13 @@ public class GlobalExceptionHandler {
                 .status(ex.getStatusCode())
                 .body(ex.getReason());
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneric(Exception ex) {
-        // log ex
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Internal server error");
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<String> handleGeneric(Exception ex) {
+//        // log ex
+//        return ResponseEntity
+//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body("Internal server error");
+//    }
 
 }
 

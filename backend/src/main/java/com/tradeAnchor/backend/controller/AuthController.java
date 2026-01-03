@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.UUID;
+
+// 401 Unauthorized
+// Access token missing or expired
+// Refresh token missing or expired
+// Authentication is required but not possible
+
+// 403 Forbidden
+// Credentials are wrong
+// Token is malformed, forged, revoked, or valid-but-not-allowed
 
 @RestController
 @RequestMapping("/public")
@@ -35,90 +45,101 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto u){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto u) {
+        try {
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    u.getUsername(),
+                                    u.getPassword()
+                            )
+                    );
 
-        System.out.println("### LOGIN ATTEMPT username=" + u.getUsername());
+            Users user = (Users) authentication.getPrincipal();
+            //Refresh token - opaque string
+            String refreshTokenValue = UUID.randomUUID().toString();
+            refreshTokenRepository.save(
+                    new RefreshToken(user.getUsername(), refreshTokenValue, user.getUserType())
+            );
+            // send refresh token as cookie
+            ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshTokenValue)
+                    .httpOnly(true)
+                    .secure(false) // true in prod
+                    .sameSite("Lax")
+                    .path("/")
+                    .maxAge(60L * 60 * 24 * 30)
+                    .build();
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                u.getUsername(),
-                                u.getPassword()
-                        )
-                );
+            LoginResponseDto dto = new LoginResponseDto(
+                    jwtUtil.generateAccessToken(user.getUsername(), user.getUserType()),
+                    user.getUserType()
+            );
 
-        Users user = (Users) authentication.getPrincipal();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(dto);
 
-        //generate refresh token - opaque string
-        String rToken = UUID.randomUUID().toString();
-        RefreshToken refreshToken = new RefreshToken(user.getUsername(), rToken, user.getUserType());
-        refreshTokenRepository.save(refreshToken);
-        //create refresh token cookie
-        ResponseCookie cookie = ResponseCookie.from("RefreshToken", rToken)
-                .httpOnly(true)
-                .secure(false)        // mandatory in production (HTTPS only)
-                .sameSite("Lax")
-                .path("/") // critical for browser to send it back later
-                .maxAge(60L*60*24*30)
-                .build();
-        LoginResponseDto responseDto = new LoginResponseDto(jwtUtil.generateAccessToken(user.getUsername(), user.getUserType()), user.getUserType());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(responseDto);
+        } catch (BadCredentialsException ex) {
+            // WRONG username/password → FORBIDDEN
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
+        }
     }
+
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(@CookieValue("RefreshToken") String token){
-        //invalidate old refresh token
+    public ResponseEntity<LoginResponseDto> refresh(
+            @CookieValue(name = "RefreshToken", required = false) String token
+    ) {
+        if (token == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing refresh token");
+        }
+
         RefreshToken tokenEntity =
-                refreshTokenRepository.findByToken(token).orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED,
-                        "Invalid refresh token"
-                ));
-
-// expired: normal failure
+                refreshTokenRepository.findByToken(token)
+                        .orElseThrow(() ->
+                                new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid refresh token")
+                        );
+// expired token - normal case
         if (tokenEntity.getExp().isBefore(Instant.now())) {
-            return ResponseEntity.status(401).build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token expired");
         }
-
-// revoked: replay attack
+// token reuse - security issue
         if (tokenEntity.getRevoked()) {
-            // revoke all tokens for this user
             refreshTokenRepository.revokeAllForUsername(tokenEntity.getUsername());
-
-            // delete cookie
-            ResponseCookie deleteCookie = ResponseCookie.from("RefreshToken", "")
-                    .path("/")
-                    .httpOnly(true)
-                    .secure(false)
-                    .maxAge(0)
-                    .build();
-
-            return ResponseEntity.status(401)
-                    .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
-                    .build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token reuse detected");
         }
 
+        // rotate refresh token
         tokenEntity.setRevoked(true);
-        tokenEntity.setExp(Instant.now()); // 1 week
-        refreshTokenRepository.save(tokenEntity);  // updated repository
-        //generate new refresh token - opaque string
-        String rToken = UUID.randomUUID().toString();
-        RefreshToken refreshToken = new RefreshToken(tokenEntity.getUsername(), rToken, tokenEntity.getUserType());
-        refreshTokenRepository.save(refreshToken);
-        //send refresh token as cookie
-        ResponseCookie cookie = ResponseCookie.from("RefreshToken", rToken)
+        tokenEntity.setExp(Instant.now());
+        refreshTokenRepository.save(tokenEntity);
+
+        String newRefreshToken = UUID.randomUUID().toString();
+        refreshTokenRepository.save(
+                new RefreshToken(tokenEntity.getUsername(), newRefreshToken, tokenEntity.getUserType())
+        );
+
+        ResponseCookie cookie = ResponseCookie.from("RefreshToken", newRefreshToken)
                 .httpOnly(true)
-                .secure(false)
+                .secure(false) // true in prod
                 .sameSite("Lax")
-                .path("/") // critical for browser to send it back later
-                .maxAge(60L*60*24*30)
+                .path("/")
+                .maxAge(60L * 60 * 24 * 30)
                 .build();
+
+        LoginResponseDto dto = new LoginResponseDto(
+                jwtUtil.generateAccessToken(
+                        tokenEntity.getUsername(),
+                        tokenEntity.getUserType()
+                ),
+                tokenEntity.getUserType()
+        );
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(jwtUtil.generateAccessToken(tokenEntity.getUsername(), tokenEntity.getUserType()));
+                .body(dto);
     }
+
 
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(@CookieValue("RefreshToken") String rt){

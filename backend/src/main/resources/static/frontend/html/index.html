@@ -19,11 +19,42 @@
             <!-- 'required' attribute ensures the field must be filled before submission. -->
         </section>
 
-        <section>
-            <input placeholder="Password" type="password" id="password" name="password" required>
+
             <!-- name="username" and name="password" are what your backend will receive as keys. If you don’t name your inputs, your server receives nothing-->
-            <p class="login-fail-message">Invalid username or password</p>
-        </section>
+            <section class="password-wrapper">
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        required
+                />
+
+                <span id="togglePassword" class="eye">
+        <!-- eye -->
+        <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+
+                    <!-- eye slash -->
+        <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             style="display: none;">
+            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8
+                     a21.81 21.81 0 0 1 5.06-6.94"/>
+            <path d="M1 1l22 22"/>
+            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8
+                     a21.82 21.82 0 0 1-4.87 6.33"/>
+        </svg>
+    </span>
+
+                <p class="login-fail-message">Invalid username or password</p>
+            </section>
+
 
         <button type="submit">Login</button>
     </form>

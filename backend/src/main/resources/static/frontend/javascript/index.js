@@ -1,6 +1,19 @@
-import { accessToken } from "/frontend/javascript/authState";
+import { authState } from "/frontend/javascript/authState.js";
 
-loginForm = document.querySelector('form');
+const password = document.getElementById("password");
+const toggle = document.getElementById("togglePassword");
+const eyeOpen = document.getElementById("eyeOpen");
+const eyeClosed = document.getElementById("eyeClosed");
+
+toggle.addEventListener("click", () => {
+    const hidden = password.type === "password";
+
+    password.type = hidden ? "text" : "password";
+    eyeOpen.style.display = hidden ? "none" : "block";
+    eyeClosed.style.display = hidden ? "block" : "none";
+});
+
+let loginForm = document.querySelector('form');
 
 loginForm.addEventListener("submit", loginFormHandler);
 
@@ -49,5 +62,3 @@ async function loginFormHandler(event) {
 }
 
 
-// Backend /login api should have: response.ok = true/false and response.userType = 'bank'/'company'/'shipper'
-//change where to redirect according to backend

@@ -4,15 +4,161 @@ Used Ethers.js in frontend rather than Web3.js - Ethers is : Clean, minimal, pre
 Why Off-Chain Mirrors Are Needed
 
 	Even though LC and B/L exist on the blockchain as NFTs, the system still maintains off-chain database tables as mirrors to make the application usable, fast, and developer-	friendly. On-chain data is the source of truth, but it’s slow to query, hard to index, and expensive to search. The off-chain tables provide a cached representation of LC, B/L, users, goods, and transactions so the backend can:
-
 		Quickly list and filter records
-
 		Render dashboards without hitting the blockchain every time
-
 		Keep role-based access and login separate from blockchain identities
-
 		Support features like sorting, searching, pagination, and auditing
-
 		Store extra UI/metadata that doesn’t belong on-chain
 
 	The blockchain stores only the critical business logic and validation, while the database stores everything needed to run a clean web application.
+
+
+AUTHENTICATION IMPLEMENTATION DESCRIPTION
+# Authentication & Session Management System (Access + Refresh Token Based)
+## 1. High-Level Overview
+I implemented a **stateless authentication system** using:
+* **JWT access tokens** for API authorization
+* **Opaque refresh tokens** for session continuity
+* **Spring Boot + Spring Security** on the backend
+* **Vanilla JS frontend** with controlled token handling
+* **Database-backed refresh token repository**
+---
+## 2. Login Flow (Step-by-Step)
+### Step 1: User Login (Frontend → Backend)
+* User submits username and password via `/public/login`
+* Credentials are sent in JSON over HTTPS
+* Cookies are enabled (`credentials: include`) to allow refresh token storage
+Frontend does **not** store passwords or tokens in persistent storage.
+---
+### Step 2: Credential Verification (Backend)
+* Spring Security’s `AuthenticationManager` authenticates credentials
+* `UserDetailsService` loads user from database
+* On success:
+  * User identity and role are established
+  * Authentication object is created in memory
+No session is created on the server.
+---
+## 3. Token Generation
+### Access Token (JWT)
+* Generated immediately after successful login
+* Contains:
+  * Username / userId
+  * User role (e.g., BANK, COMPANY)
+  * Expiry timestamp
+* Signed using server secret key
+Properties:
+* Short-lived (≈15–30 minutes)
+* Stateless
+* Never stored in database
+Returned to frontend in the **response body**.
+---
+### Refresh Token (Opaque)
+* Generated as a cryptographically random UUID
+* Stored in **refresh_token table** with:
+  * token value
+  * username
+  * expiry time
+  * revoked flag
+Sent to client as:
+* HTTP-only cookie
+* Secure flag enabled
+* SameSite configured
+* Long expiration (days/weeks)
+Frontend **cannot read or modify** this token.
+---
+## 4. Frontend Token Handling
+### Access Token Handling
+* Stored **only in memory** (JavaScript variable)
+* Never stored in:
+  * localStorage
+  * sessionStorage
+  * cookies
+Used by a custom `authFetch()` wrapper:
+* Automatically adds `Authorization: Bearer <accessToken>`
+* Centralizes authentication logic
+* Prevents token leakage across requests
+---
+### Refresh Token Handling
+* Automatically attached by browser via cookie
+* Used only when calling `/public/refresh`
+* Frontend has zero visibility into its value
+This prevents XSS-based token theft.
+---
+## 5. Protected Request Flow
+1. Frontend sends request with access token
+2. `JwtAuthFilter` intercepts request
+3. Filter:
+   * Extracts `Authorization` header
+   * Verifies JWT signature
+   * Checks expiry
+4. If valid:
+   * SecurityContext is populated
+   * Request proceeds to controller
+5. If invalid or expired:
+   * 401 Unauthorized returned
+No database lookup happens here → **fast and scalable**.
+---
+## 6. Access Token Expiry Handling
+When frontend receives `401 Unauthorized`:
+1. `authFetch()` detects the failure
+2. Automatically calls `/public/refresh`
+3. Browser sends refresh token cookie
+4. Frontend waits (promise-based locking to avoid race conditions)
+---
+## 7. Refresh Endpoint Flow
+### Backend `/public/refresh`
+1. Extract refresh token from cookie
+2. Look up token in database
+3. Validate:
+   * Exists
+   * Not expired
+   * Not revoked
+4. If valid:
+   * Generate new access token
+   * Rotate refresh token:
+     * Old token revoked
+     * New token issued and stored
+5. New refresh token sent as cookie
+6. New access token returned in response body
+If refresh token is invalid:
+* Backend rejects request
+* Frontend logs user out
+---
+## 8. Token Rotation (Security Detail)
+Every refresh operation:
+* Invalidates the previous refresh token
+* Issues a new one
+Why:
+* Prevents replay attacks
+* Limits damage if refresh token is stolen
+* Enforces single-session continuity
+This turns token theft into a race condition attackers usually lose.
+---
+## 9. Logout Flow
+On logout:
+* Refresh token entry is revoked or deleted from database
+* Cookie is cleared
+* Access token is discarded in frontend memory
+Result:
+* No valid refresh token → session is dead
+* Access token expires naturally
+---
+## 10. Why This Design Is Correct
+### Security
+* No long-lived JWTs
+* No tokens in localStorage
+* Refresh tokens are revocable
+* Minimal attack surface
+### Performance
+* Access token validation is stateless
+* No DB hits on normal API calls
+### Scalability
+* Backend remains stateless
+* Horizontal scaling works naturally
+### Maintainability
+* Clear separation of concerns
+* Centralized auth logic
+* Clean failure handling
+---
+## 11. One-Line Interview Summary
+> “I implemented a stateless authentication system using short-lived JWT access tokens for API authorization and database-backed opaque refresh tokens stored in HTTP-only cookies to manage session continuity securely, with automatic token rotation and centralized frontend handling.”

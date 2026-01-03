@@ -32,9 +32,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/frontend/**").permitAll()
-                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/public/**",
+                                "/frontend/**",
+                                "/css/**",
+                                "/javascript/**",
+                                "/images/**",
+                                "/favicon.ico",
+                                "/error/**")
+                        .permitAll()
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

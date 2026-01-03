@@ -5,29 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e79bf3ef-3772-4ca4-8219-3d99b30fba67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/dto/LoginResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/authState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/company-dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/dto/RefreshDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/dto/RefreshDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/filter/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/filter/JwtAuthFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/model/RefreshToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/model/RefreshToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/model/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/model/Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/util/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/create-account.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/html/bank-dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/html/company-dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/html/create-account.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/html/shipper-dashboard.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/javascript/create-account.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/javascript/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/TALogo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/TradeAnchorLogo.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,12 +29,12 @@
     &quot;assignee&quot;: &quot;Nuclear990&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:Nuclear990/Trade-Finance-Blockchain.git",
-    "accountId": "9dfa4ce3-5a79-4373-a4e7-e7832d62ddab"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:Nuclear990/Trade-Finance-Blockchain.git&quot;,
+    &quot;accountId&quot;: &quot;9dfa4ce3-5a79-4373-a4e7-e7832d62ddab&quot;
   }
-}]]></component>
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>

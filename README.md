@@ -9,17 +9,17 @@ The system tracks the major steps of a cross-border trade:
 
   1. Importer Company requests a Letter of Credit from their Bank.
   
-  2. Bank issues the LC as an ERC-721 token.
+  2. Importer's Bank issues the LC as an ERC-721 token.
   
   3. Shipper issues the Bill of Lading as an ERC-721 token to Exporter.
   
-  4. Exporter submits the B/L to their Bank.
+  4. Exporter submits the B/L to their Bank, which forwards it to Importer's Bank.
   
-  5. Bank verifies the B/L against LC conditions.
+  5. Importer's Bank verifies the B/L against LC conditions.
   
   6. Smart contract automatically executes payment using Ether.
   
-  7. Ownership of the B/L token transfers to the importer.
+  7. Ownership of the B/L token transfers to the Importer.
   
   8. Importer presents the B/L to the shipper to receive goods.
   

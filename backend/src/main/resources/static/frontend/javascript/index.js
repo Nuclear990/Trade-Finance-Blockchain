@@ -1,4 +1,4 @@
-import { accessToken } from "./authState";
+import { accessToken } from "/frontend/javascript/authState";
 
 loginForm = document.querySelector('form');
 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeAnchor-Login</title>
+    <!-- <link rel="stylesheet" href="/frontend/css/company-dashboard.css"> -->
+    <style>
+        #test-button {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<button id="test-button">Test</button>
+<script type="module">
+    import { authFetch } from "/frontend/javascript/authState.js";
+
+    document.getElementById('test-button')
+        .addEventListener('click', async () => {
+            const response = await authFetch('/secure/hello');
+            const text = await response.text();
+            console.log(text);
+        });
+</script>
+
+</body>
+</html>

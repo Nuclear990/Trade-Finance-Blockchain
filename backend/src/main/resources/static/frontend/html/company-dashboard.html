@@ -13,7 +13,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -22,7 +22,7 @@
 <script type="module">
     import { authFetch } from "/frontend/javascript/authState.js";
 
-    document.getElementById('test-button')
+    document.getElementById('test-button', {method: 'GET'})
         .addEventListener('click', async () => {
             const response = await authFetch('/secure/hello');
             const text = await response.text();

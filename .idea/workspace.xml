@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e79bf3ef-3772-4ca4-8219-3d99b30fba67" name="Changes" comment="">
+    <list default="true" id="e79bf3ef-3772-4ca4-8219-3d99b30fba67" name="Changes" comment="bugs fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/exceptionHandler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/exceptionHandler/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/filter/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tradeAnchor/backend/filter/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/css/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/html/company-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/html/company-dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/html/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/company-dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/company-dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/authState.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/authState.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/static/frontend/javascript/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,6 +87,19 @@
       <option name="presentableId" value="Default" />
       <updated>1765544871933</updated>
     </task>
+    <task id="LOCAL-00001" summary="bugs fixed">
+      <option name="closed" value="true" />
+      <created>1767435202348</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1767435202348</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="bugs fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugs fixed" />
   </component>
 </project>

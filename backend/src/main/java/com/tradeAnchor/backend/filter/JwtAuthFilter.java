@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -28,53 +29,52 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
+        System.out.println(request.getServletPath());
+        if(request.getServletPath().startsWith("/secure") && authHeader == null){
+            System.out.println("\n\n\nAUTH HEADER NULL\n\n\n");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
 
-            try {
-                Claims claims = jwtUtil.extractAllClaims(token);
+        String token = authHeader.substring(7);
 
-                // **check token type**
-                if (!"access".equals(claims.get("type"))) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
+        try {
+            Claims claims = jwtUtil.extractAllClaims(token);
 
-                String username = claims.getSubject();
-                String role = claims.get("userType", String.class);
-
-                var authority = new SimpleGrantedAuthority(role);
-
-                // **register auth**
-                SecurityContextHolder.getContext().setAuthentication(
-                        new UsernamePasswordAuthenticationToken(
-                                username,
-                                null,
-                                List.of(authority)
-                        )
-                );
-
-            } catch (ExpiredJwtException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setHeader("Token-Expired", "true");
-                return;
-
-            } catch (Exception e) {
-                // signature invalid / malformed token / etc
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // token type mismatch → FORBIDDEN
+            if (!"access".equals(claims.get("type"))) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
 
-        } else {
-            // **no token → explicitly clear context**
-            SecurityContextHolder.clearContext();
-        }
+            String username = claims.getSubject();
+            String role = claims.get("userType", String.class);
 
-        filterChain.doFilter(request, response);
+            var authority = new SimpleGrantedAuthority(role);
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            null,
+                            List.of(authority)));
+
+            filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtException e) {
+            // expired access token → UNAUTHORIZED (frontend may refresh)
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("TokenExpired", "true");
+        } catch (Exception e) {
+            // malformed / forged / invalid signature → FORBIDDEN
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 }

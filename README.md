@@ -33,10 +33,10 @@ The blockchain layer contains four core smart contracts:
   **IdentityRegistry**
   Stores authorized participants: banks, companies, and shippers.
   
-  **LcToken (ERC-721)**
+  **LCToken (ERC-721)**
   Represents the Letter of Credit. Stores applicant (importer), beneficiary (exporter), LC amount, and terms.
   
-  **BlToken (ERC-721)**
+  **B/LToken (ERC-721)**
   Represents the Bill of Lading. Stores shipper, exporter, importer, and goods-related metadata.
   
   **TradeFinanceManager**
@@ -48,7 +48,7 @@ The blockchain layer contains four core smart contracts:
 The web application is built using:
 
   - **Spring Boot** for backend services and REST APIs.
-  - **Web3j** for interacting with the Besu nodes and smart contracts.
+  - **Web3js** for interacting with the Besu nodes and smart contracts.
   - **PostgreSQL** for local persistence and fast querying.
   - **HTML, CSS, and JavaScript** for front-end dashboards.
   - **Ethers.js** for wallet interactions.

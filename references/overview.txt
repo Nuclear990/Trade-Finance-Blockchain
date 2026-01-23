@@ -35,7 +35,7 @@ Functionalities -
 			release payment (token transfer) 
 			transfer B/L to importer 
 			receive B/L from exporter bank 
-			OFF-CHAIN (backend) 
+		OFF-CHAIN (backend) 
 			maintain accounts 
 			maintain balances logs/history UI 
 	

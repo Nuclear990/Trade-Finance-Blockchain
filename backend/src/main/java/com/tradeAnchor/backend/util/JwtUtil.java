@@ -16,7 +16,7 @@ public class JwtUtil {
         long expiration_time = 1000 * 60 * 5; // 5 mins
         return Jwts.builder()
                 .setSubject(username)
-                .claim("userType", userType)
+                .claim("userType", "ROLE_" + userType)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration_time))
                 .claim("type", "access")

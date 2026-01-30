@@ -41,6 +41,9 @@ public class SecurityConfig {
                                 "/favicon.ico",
                                 "/error/**")
                         .permitAll()
+                        .requestMatchers("/bank/**").hasRole("BANK")
+                        .requestMatchers("/company/**").hasRole("COMPANY")
+                        .requestMatchers("/shipper/**").hasRole("SHIPPER")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -58,16 +61,16 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return new ProviderManager(daoAuthenticationProvider);
     }
-    @Bean
-    CommandLineRunner init(UsersRepository repo, PasswordEncoder encoder) {
-        return args -> {
-            if (repo.findByUsername("daddy").isEmpty()) {
-                Users u = new Users();
-                u.setUsername("daddy");
-                u.setPassword(encoder.encode("secret"));
-                u.setUserType("company");
-                repo.save(u);
-            }
-        };
-    }
+//    @Bean
+//    CommandLineRunner init(UsersRepository repo, PasswordEncoder encoder) {
+//        return args -> {
+//            if (repo.findByUsername("daddy").isEmpty()) {
+//                Users u = new Users();
+//                u.setUsername("daddy");
+//                u.setPassword(encoder.encode("secret"));
+//                u.setUserType("company");
+//                repo.save(u);
+//            }
+//        };
+//    }
 }

@@ -5,38 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account</title>
-    <link rel="stylesheet" href="../../../../../../../frontend/css/create-account.css">
+    <link rel="stylesheet" href="/frontend/css/global.css">
+    <link rel="stylesheet" href="/frontend/css/create-account.css">
+
 </head>
 
 <body>
-    <img src="../../images/TradeAnchorLogo.png">
+<img class="logo" src="/images/TradeAnchorLogo.png">
 
-    <form>
-        <section>
-            <select id="role" name="role" required>
-                <option value="">-- Select Role --</option>
-                <option value="bank">Bank</option>
-                <option value="company">Company</option>
-                <option value="shipper">Shipper</option>
-            </select>
+<form>
+    <section>
+        <select
+                id="userType"
+                name="userType"
+                autocomplete="organization"
+                required
+        >
+            <option value="">-- Select Role --</option>
+            <option value="BANK">Bank</option>
+            <option value="COMPANY">Company</option>
+            <option value="SHIPPER">Shipper</option>
+        </select>
+    </section>
 
-        </section>
+    <section>
+        <input
+                placeholder="Username"
+                type="text"
+                id="username"
+                name="username"
+                autocomplete="username"
+                required
+        >
+        <p id="username-invalid" class="error-text"></p>
+    </section>
 
-        <section>
-            <input placeholder="Name" type="text" id="name" name="name" required>
-        </section>
+    <section>
 
-        <section>
-            <input placeholder="Password" type="password" id="password" name="password" required>
-        </section>
+        <input
+                placeholder="Password"
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="new-password"
+                required
+        >
+        <p id="password-invalid" class="error-text"></p>
+    </section>
 
-        <section>
-            <input placeholder="Confirm Password " type="password" id="confirmPassword" name="confirmPassword" required>
-            <p class="password-mismatch-message">Must be same as password</p>
-        </section>
+    <section>
+        <input
+                placeholder="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                autocomplete="new-password"
+                required
+        >
+        <p id="confirmPassword-invalid" class="error-text"></p>
+    </section>
 
-        <button type="submit">Create</button>
-    </form>
+    <button type="submit">Create</button>
+</form>
 
-    <script src="../../../../../../../frontend/javascript/create-account.js"></script>
+<script type="module" src="/frontend/javascript/create-account.js"></script>
+</body>
 </html>

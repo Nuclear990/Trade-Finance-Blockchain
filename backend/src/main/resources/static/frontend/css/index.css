@@ -1,31 +1,5 @@
-/* -------- Page layout -------- */
-body {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 100px;
-    margin: 0;
-}
-
-/* -------- Logo -------- */
-img {
-    width: 250px;
-    height: auto;
-    margin-bottom: 40px;
-    border-radius: 50%;
-}
-
-/* -------- Form -------- */
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 /* -------- Inputs -------- */
-
-
 input {
     border-radius: 5px;
     width: 300px;
@@ -36,62 +10,7 @@ input {
     height: 42px;
     padding: 0 12px;
 }
-/* -------- Password wrapper -------- */
-.password-wrapper {
-    position: relative;
-    width: 300px;
-}
 
-/* Space for the eye icon */
-.password-wrapper input {
-    width: 100%;
-    padding-right: 40px;
-}
-
-/* -------- Eye icon -------- */
-.password-wrapper .eye {
-    position: absolute;
-    right: 12px;
-    top: 40%;
-    transform: translateY(-70%);
-    cursor: pointer;
-    color: #777;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper .eye:hover {
-    color: #000;
-}
-
-/* -------- Error state -------- */
-.login-fail-message {
-    color: rgb(218, 13, 13);
-    display: none;
-    margin-top: 5px;
-    font-size: 14px;
-}
-
-.login-fail {
-    border-color: rgb(218, 13, 13);
-}
-
-/* -------- Button -------- */
-button {
-    padding: 10px 20px;
-    background-color: #051844;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 19px;
-    margin-top: 9px;
-    width: 300px;
-}
-
-button:hover {
-    opacity: 0.95;
-}
 
 /* -------- Divider -------- */
 hr {
@@ -100,16 +19,3 @@ hr {
     border-top: 2px solid #051844;
     margin-top: 40px;
 }
-
-/* -------- Link -------- */
-a {
-    margin-top: 20px;
-    color: #051844;
-    font-size: 20px;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-

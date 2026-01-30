@@ -5,65 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TradeAnchor-Login</title>
+    <link rel="stylesheet" href="/frontend/css/global.css">
     <link rel="stylesheet" href="/frontend/css/index.css">
+
 </head>
 
 <body>
-    <img src="/images/TradeAnchorLogo.png">
+<img class="logo" src="/images/TradeAnchorLogo.png">
 
-    <form>
-        <!-- Send the form data to the /login backend route, method="post" ensures the data gets sent securely in the HTTP body, not in the URL. -->
+<form>
+    <section>
+        <input
+                placeholder="Username"
+                type="text"
+                id="username"
+                name="username"
+                autocomplete="username"
+                required
+        >
+    </section>
 
-        <section>
-            <input placeholder="Username" type="text" id="username" name="username" required>
-            <!-- 'required' attribute ensures the field must be filled before submission. -->
-        </section>
+    <section>
+        <div class="password-wrapper">
+        <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                autocomplete="current-password"
+                required
+        />
 
+        <span id="togglePassword" class="eye">
+                <!-- eye -->
+                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
 
-            <!-- name="username" and name="password" are what your backend will receive as keys. If you don’t name your inputs, your server receives nothing-->
-            <section class="password-wrapper">
-                <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Password"
-                        required
-                />
+            <!-- eye slash -->
+                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     style="display: none;">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8
+                             a21.81 21.81 0 0 1 5.06-6.94"/>
+                    <path d="M1 1l22 22"/>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8
+                             a21.82 21.82 0 0 1-4.87 6.33"/>
+                </svg>
+            </span>
+        </div>
+        <p id="invalidCredentials" class="error-text"></p>
+    </section>
 
-                <span id="togglePassword" class="eye">
-        <!-- eye -->
-        <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-        </svg>
+    <button type="submit">Login</button>
+</form>
 
-                    <!-- eye slash -->
-        <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             style="display: none;">
-            <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8
-                     a21.81 21.81 0 0 1 5.06-6.94"/>
-            <path d="M1 1l22 22"/>
-            <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8
-                     a21.82 21.82 0 0 1-4.87 6.33"/>
-        </svg>
-    </span>
+<hr>
 
-                <p class="login-fail-message">Invalid username or password</p>
-            </section>
+<a href="/frontend/html/create-account.html">Create new account</a>
 
-
-        <button type="submit">Login</button>
-    </form>
-
-    <hr> <!--horizontal rule-->
-
-    <a href="/frontend/html/create-account.html">Create new account</a>
-
-    <script type="module" src="/frontend/javascript/index.js"></script>
+<script type="module" src="/frontend/javascript/index.js"></script>
 </body>
 
 </html>

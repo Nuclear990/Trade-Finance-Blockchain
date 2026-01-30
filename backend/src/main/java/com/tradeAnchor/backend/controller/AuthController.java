@@ -71,7 +71,7 @@ public class AuthController {
                     .build();
 
             LoginResponseDto dto = new LoginResponseDto(
-                    jwtUtil.generateAccessToken(user.getUsername(), user.getUserType()),
+                    jwtUtil.generateAccessToken(user.getUsername(), user.getUserType().name()),
                     user.getUserType()
             );
 
@@ -130,7 +130,7 @@ public class AuthController {
         LoginResponseDto dto = new LoginResponseDto(
                 jwtUtil.generateAccessToken(
                         tokenEntity.getUsername(),
-                        tokenEntity.getUserType()
+                        tokenEntity.getUserType().name()
                 ),
                 tokenEntity.getUserType()
         );

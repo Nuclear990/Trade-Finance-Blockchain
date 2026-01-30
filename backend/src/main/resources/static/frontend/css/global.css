@@ -1,0 +1,82 @@
+/* ---------- Base layout ---------- */
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+    margin: 0;
+}
+
+/* ---------- Logo ---------- */
+.logo {
+    width: 250px;
+    margin-bottom: 40px;
+    border-radius: 50%;
+}
+
+/* ---------- Form ---------- */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ---------- Buttons ---------- */
+button {
+    width: 300px;
+    padding: 10px;
+    font-size: 17px;
+    background-color: #051844;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    opacity: 0.95;
+}
+
+
+.password-wrapper {
+    position: relative;
+    width: 300px;
+}
+
+.password-wrapper input {
+    padding-right: 42px; /* space for eye icon */
+}
+
+.password-wrapper .eye {
+    position: absolute;
+    right: 12px;
+    top: 40%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* ---------- Errors ---------- */
+.error-text {
+    color: rgb(218, 13, 13);
+    display: none;
+    font-size: 15px;
+    margin-bottom: 6px;
+    margin-top: 0px;
+}
+
+.error-text.active {
+    display: block;
+}
+
+a {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #051844;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

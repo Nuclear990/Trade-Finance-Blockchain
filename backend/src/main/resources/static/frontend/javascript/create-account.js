@@ -1,43 +1,58 @@
-const createForm = document.querySelector('form');
+import { showError, clearErrors } from "/frontend/javascript/ui.js";
+import { authFetch } from "/frontend/javascript/authState.js";
 
-createForm.addEventListener("submit", createFormHandler);
+const form = document.querySelector('form');
+const username = document.querySelector('#username');
+const password = document.querySelector('#password');
+const confirm = document.querySelector('#confirmPassword');
+const role = document.querySelector('#userType');
+const invalidUsername = document.querySelector('#username-invalid');
+const invalidPassword = document.querySelector('#password-invalid');
+const invalidConfirm = document.querySelector('#confirmPassword-invalid');
 
-// attach once (NOT inside submit)
-const confirmPassword = document.querySelector('#confirmPassword');
-confirmPassword.addEventListener('input', () => {
-    document.querySelector('.password-mismatch-message').style.display = 'none';
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', (event) => {
+        clearErrors(event.target.parentElement);
+    });
 });
 
-async function createFormHandler(event) {
-    event.preventDefault(); // STOP page reload
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+    let invalid = false;
 
-    const role = document.querySelector('#role').value;
-    const name = document.querySelector('#name').value;
-    const password = document.querySelector('#password').value;
-    const confirmPasswordVal = confirmPassword.value;
-
-    // password mismatch
-    if (password !== confirmPasswordVal) {
-        document.querySelector('.password-mismatch-message').style.display = 'block';
-        confirmPassword.focus();
-        return;   // Stop here
+    if (username.value.length < 3 || username.value.length > 50) {
+        showError(invalidUsername, 'Username must be 3 to 50 characters long');
+        invalid = true;
     }
 
-    // send data to backend
-    const response = await fetch('/api/users/create', {
+    if (password.value.length < 8) {
+        showError(invalidPassword, 'Password should be at least 8 characters long');
+        invalid = true;
+    }
+
+    if (password.value !== confirm.value) {
+        showError(invalidConfirm, 'Must be same as Password');
+        invalid = true;
+    }
+
+
+    if (invalid) return;
+
+    const res = await fetch('/public/createUser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role, username: name, password })
+        body: JSON.stringify({
+            username: username.value,
+            password: password.value,
+            userType: role.value
+        })
     });
 
-    if (response.ok) {
-        const data = await response.json();
-        alert(`Account created successfully as ${role}.\nYour Username is ${data.username}`);
-        window.location.replace('index.html')
+    if (res.status === 201) {
+        window.location.replace('index.html');
+    } else if (res.status === 409) {
+        showError(invalidUsername, 'Username already exists');
     } else {
-        alert('Failed to create account.');
+        alert('Account creation failed');
     }
-}
-
-//backend /api/users/create should return response.ok=true/false and response.username on success
-//change where to redirect according to backend
+});

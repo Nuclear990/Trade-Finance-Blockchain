@@ -31,7 +31,7 @@ export async function authFetch(url, options = {}) {
         return response;
     }
 
-    // 🔁 Single refresh lock
+    // Single refresh lock
     if (refreshPromise === null) {
         refreshPromise = refreshAccessToken().finally(() => {
             refreshPromise = null;

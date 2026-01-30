@@ -1,64 +1,45 @@
-import { authState } from "/frontend/javascript/authState.js";
+import { authFetch } from "/frontend/javascript/authState.js";
+import { showError, clearErrors, setupPasswordToggle } from "/frontend/javascript/ui.js";
 
-const password = document.getElementById("password");
-const toggle = document.getElementById("togglePassword");
-const eyeOpen = document.getElementById("eyeOpen");
-const eyeClosed = document.getElementById("eyeClosed");
+const form = document.querySelector('form');
+const username = document.querySelector('#username');
+const password = document.querySelector('#password');
 
-toggle.addEventListener("click", () => {
-    const hidden = password.type === "password";
+setupPasswordToggle(
+    password,
+    document.getElementById('togglePassword')
+);
 
-    password.type = hidden ? "text" : "password";
-    eyeOpen.style.display = hidden ? "none" : "block";
-    eyeClosed.style.display = hidden ? "block" : "none";
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', (event) => {
+        clearErrors(event.target.parentElement);
+    });
 });
 
-let loginForm = document.querySelector('form');
+form.addEventListener('submit', async e => {
+    e.preventDefault();
 
-loginForm.addEventListener("submit", loginFormHandler);
-
-const usernameE = document.querySelector('#username');
-const passwordE = document.querySelector('#password');
-
-usernameE.addEventListener('input', retry);
-passwordE.addEventListener('input', retry);
-
-function retry() {
-    usernameE.classList.remove('login-fail');
-    passwordE.classList.remove('login-fail');
-    document.querySelector('.login-fail-message').style.display = 'none';
-}
-async function loginFormHandler(event) {
-    event.preventDefault();
-    const username = usernameE.value;
-    const password = passwordE.value;
-
-    const response = await fetch('/public/login', {
+    const res = await fetch('/public/login', {
         method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({ username, password })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            "username" : username.value,
+            "password" : password.value
+        })
     });
-
-    if (response.ok) {
-        const data = await response.json();
-       authState.accessToken = data.accessToken;
-        if (data.userType === 'bank') {
-            window.location.replace('/frontend/html/bank-dashboard.html');
-        } else if (data.userType === 'company') {
-            window.location.replace('/frontend/html/company-dashboard.html');
-        } else {
-            window.location.replace('/frontend/html/shipper-dashboard.html');
-            //window.location.replace(url) redirects to a new page without adding the current page to the browser history.
-            //window.location.href = url does the same thing but adds the current page to the browser history. ser can press Back → goes back to login
-        }
-    } else {
-        usernameE.classList.add('login-fail');
-        passwordE.classList.add('login-fail');
-        document.querySelector('.login-fail-message').style.display = 'block';
+let invalidElement = document.querySelector("#invalidCredentials");
+    if (!res.ok) {
+        showError(invalidElement, 'Invalid credentials');
+        return;
     }
-}
 
+    const data = await res.json();
 
+    const map = {
+        BANK: 'bank-dashboard.html',
+        COMPANY: 'company-dashboard.html',
+        SHIPPER: 'shipper-dashboard.html'
+    };
+
+    window.location.replace(`/frontend/html/${map[data.userType]}`);
+});

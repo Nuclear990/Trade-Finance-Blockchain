@@ -26,6 +26,7 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType userType;
+    private String ethereumAddress;
 
     public Users(String username, String password, UserType userType) {
         this.username = username;

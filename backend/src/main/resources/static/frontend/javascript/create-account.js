@@ -49,6 +49,7 @@ form.addEventListener('submit', async e => {
     });
 
     if (res.status === 201) {
+        alert('Account created successfully!\nYou will now be redirected to login page');
         window.location.replace('index.html');
     } else if (res.status === 409) {
         showError(invalidUsername, 'Username already exists');

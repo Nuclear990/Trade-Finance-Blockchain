@@ -32,7 +32,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        System.out.println(request.getServletPath());
         if(request.getServletPath().startsWith("/secure") && authHeader == null){
             System.out.println("\n\n\nAUTH HEADER NULL\n\n\n");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

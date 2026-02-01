@@ -11,7 +11,6 @@ api_addr = "http://127.0.0.1:8200"
 
 seal "transit" {
   address    = "http://127.0.0.1:8300"
-  token      = "REDACTEDellhZkFBeDVJRkZXUVUzN3EyVXQ"
   key_name   = "main-vault-unseal"
   mount_path = "transit"
 }

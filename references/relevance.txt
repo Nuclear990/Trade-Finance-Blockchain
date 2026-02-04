@@ -1,0 +1,9 @@
+We’re building a regulator-aligned trade finance network that gives banks a single, immutable view of trade transactions instead of fragmented bilateral systems.
+It allows multiple banks to jointly guarantee a trade, so no single bank has to carry the entire risk.
+For companies, this means faster access to larger guarantees without being limited by one bank’s balance sheet.
+Central authorities participate as audit nodes, which gives them real-time visibility rather than after-the-fact reporting.
+The whole system runs on a permissioned, Ethereum-compatible ledger with immediate finality and no public blockchain costs.
+
+We monetize as a consortium infrastructure operator, charging banks and institutions for access, governance, and regulated operation—not per transaction and not through tokens.
+
+We run a regulator-aligned trade finance network where multiple banks can jointly guarantee trades on an immutable ledger, giving companies better access to capital and regulators real-time oversight—without public blockchain risk.

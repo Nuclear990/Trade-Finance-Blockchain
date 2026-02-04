@@ -162,3 +162,13 @@ Result:
 ---
 ## 11. One-Line Interview Summary
 > “I implemented a stateless authentication system using short-lived JWT access tokens for API authorization and database-backed opaque refresh tokens stored in HTTP-only cookies to manage session continuity securely, with automatic token rotation and centralized frontend handling.”
+
+
+Smart Contracts - wrote an deployed using HardHat to Sepolia
+
+HashiCorp Vault - to store manager's private key
+
+Transaction flow -
+Users initiate, manager signs and sends to blockchain
+
+Blockchain - testing on Sepolia, will shift to Hyperledger Besu

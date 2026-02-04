@@ -1,3 +1,5 @@
 Every new company account has 10 currency and 10 goods at creation.
 BL is minted to exporter's bank directly - not to exporter and then transfer to exporter's bank.
 Only one manager, manager never changes.
+When token is minted, goods/money gets transferred too.
+When bank calls settle - goods get released, money gets transfered, tokens set to utilized.

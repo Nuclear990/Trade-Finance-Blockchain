@@ -1,0 +1,2 @@
+Every new company account has 10 currency and 10 goods at creation.
+BL is minted to exporter's bank directly - not to exporter and then transfer to exporter's bank.

@@ -1,0 +1,24 @@
+sudo docker start tradeanchor-db
+
+=== Vault Startup Checklist (Auto-Unseal Enabled) ===
+
++ Start the Unseal Vault (transit Vault)
+sudo vault server -config=vaultDirectory/unseal.hcl
+
+
+Start the Main Vault
+
+sudo vault server -config=vaultDirectory/vaultSetup.hcl
+
+
+Verify
+
+export VAULT_ADDR=http://127.0.0.1:8200
+vault status
+
+
+Expect:
+
+Initialized: true
+Sealed: false
+Seal Type: transit

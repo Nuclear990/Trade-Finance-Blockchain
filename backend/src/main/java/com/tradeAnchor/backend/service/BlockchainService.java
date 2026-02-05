@@ -3,8 +3,6 @@ package com.tradeAnchor.backend.service;
 import com.tradeAnchor.backend.model.UserType;
 import com.tradeAnchor.backend.model.Users;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
@@ -16,7 +14,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @Service
-public class BlockchainServiceImpl implements BlockchainService {
+public class BlockchainService {
 
     private final VaultService vaultService;
     private final UsersDetailsService usersDetailsService;
@@ -30,12 +28,14 @@ public class BlockchainServiceImpl implements BlockchainService {
     @Value("${blockchain.bl-token-address}")
     private String blTokenAddress;
 
-    // tune these once, centrally
-    private static final BigInteger GAS_LIMIT = BigInteger.valueOf(200_000);
+    // Gas price stays here (policy decision)
     private static final BigInteger GAS_PRICE =
             BigInteger.valueOf(1_000_000_000L); // 1 gwei
 
-    public BlockchainServiceImpl(VaultService vaultService, UsersDetailsService usersDetailsService) {
+    public BlockchainService(
+            VaultService vaultService,
+            UsersDetailsService usersDetailsService
+    ) {
         this.vaultService = vaultService;
         this.usersDetailsService = usersDetailsService;
     }
@@ -44,31 +44,29 @@ public class BlockchainServiceImpl implements BlockchainService {
     /* Identity                                         */
     /* ------------------------------------------------ */
 
-    @Override
-    public String createUser(Long userId, UserType role) {
+    public String createUser(String ethAddress, UserType role) {
 
         Function fn = new Function(
                 "createUser",
-                List.of(new Uint8(role.chainValue())),
+                List.of(
+                        new Address(ethAddress),
+                        new Uint8(role.chainValue())
+                ),
                 List.of()
         );
 
         return vaultService.signAndSend(
-                userId,
                 identityAddress,
                 FunctionEncoder.encode(fn),
                 BigInteger.ZERO,
-                GAS_LIMIT,
                 GAS_PRICE
         );
     }
+
     public boolean userExists(String username) {
 
-        Users u = (Users) usersDetailsService.loadUserByUsername(username);
-
-        List<TypeReference<?>> outputParams = List.of(
-                new TypeReference<Bool>() {}
-        );
+        Users u =
+                (Users) usersDetailsService.loadUserByUsername(username);
 
         Function fn = new Function(
                 "getUser",
@@ -77,60 +75,27 @@ public class BlockchainServiceImpl implements BlockchainService {
                         new TypeReference<Uint8>() {},     // role
                         new TypeReference<Uint256>() {},   // balance
                         new TypeReference<Uint256>() {},   // reserved
-                        new TypeReference<Uint256>() {}    // goods
+                        new TypeReference<Uint256>() {},   // goods
+                        new TypeReference<Bool>() {}       // exists
                 )
         );
 
-        List<Type> result = vaultService.call(
-                identityAddress,
-                FunctionEncoder.encode(fn),
-                fn.getOutputParameters()
-        );
+        List<Type> result =
+                vaultService.call(
+                        identityAddress,
+                        FunctionEncoder.encode(fn),
+                        fn.getOutputParameters()
+                );
 
-// If all zero, user was never created
-        boolean exists =
-                !((Uint256) result.get(1)).getValue().equals(BigInteger.ZERO) ||
-                        !((Uint256) result.get(2)).getValue().equals(BigInteger.ZERO) ||
-                        !((Uint256) result.get(3)).getValue().equals(BigInteger.ZERO);
-
-        return exists;
-
-    }
-
-
-
-    @Override
-    public String bankPayout(
-            Long bankUserId,
-            String exporterAddress,
-            BigInteger amount
-    ) {
-        Function fn = new Function(
-                "bankPayout",
-                List.of(
-                        new Address(exporterAddress),
-                        new Uint256(amount)
-                ),
-                List.of()
-        );
-
-        return vaultService.signAndSend(
-                bankUserId,
-                identityAddress,
-                FunctionEncoder.encode(fn),
-                BigInteger.ZERO,
-                GAS_LIMIT,
-                GAS_PRICE
-        );
+        return ((Bool) result.get(4)).getValue();
     }
 
     /* ------------------------------------------------ */
     /* LC                                               */
     /* ------------------------------------------------ */
 
-    @Override
     public String issueLC(
-            Long issuerBankUserId,
+            String bankActor,
             BigInteger txnId,
             String importer,
             String exporter,
@@ -140,9 +105,11 @@ public class BlockchainServiceImpl implements BlockchainService {
             BigInteger amount,
             BigInteger goods
     ) {
+
         Function fn = new Function(
                 "issueLC",
                 List.of(
+                        new Address(bankActor),
                         new Uint256(txnId),
                         new Address(importer),
                         new Address(exporter),
@@ -156,11 +123,9 @@ public class BlockchainServiceImpl implements BlockchainService {
         );
 
         return vaultService.signAndSend(
-                issuerBankUserId,
                 managerAddress,
                 FunctionEncoder.encode(fn),
                 BigInteger.ZERO,
-                GAS_LIMIT,
                 GAS_PRICE
         );
     }
@@ -169,9 +134,8 @@ public class BlockchainServiceImpl implements BlockchainService {
     /* BL                                               */
     /* ------------------------------------------------ */
 
-    @Override
     public String issueBL(
-            Long shipperUserId,
+            String shipperActor,
             BigInteger txnId,
             String importer,
             String exporter,
@@ -180,9 +144,11 @@ public class BlockchainServiceImpl implements BlockchainService {
             String shipper,
             BigInteger goods
     ) {
+
         Function fn = new Function(
                 "issueBL",
                 List.of(
+                        new Address(shipperActor),
                         new Uint256(txnId),
                         new Address(importer),
                         new Address(exporter),
@@ -195,38 +161,9 @@ public class BlockchainServiceImpl implements BlockchainService {
         );
 
         return vaultService.signAndSend(
-                shipperUserId,
                 managerAddress,
                 FunctionEncoder.encode(fn),
                 BigInteger.ZERO,
-                GAS_LIMIT,
-                GAS_PRICE
-        );
-    }
-
-    @Override
-    public String transferBL(
-            Long exporterUserId,
-            String exporter,
-            String exporterBank,
-            BigInteger blTokenId
-    ) {
-        Function fn = new Function(
-                "safeTransferFrom",
-                List.of(
-                        new Address(exporter),
-                        new Address(exporterBank),
-                        new Uint256(blTokenId)
-                ),
-                List.of()
-        );
-
-        return vaultService.signAndSend(
-                exporterUserId,
-                blTokenAddress,
-                FunctionEncoder.encode(fn),
-                BigInteger.ZERO,
-                GAS_LIMIT,
                 GAS_PRICE
         );
     }
@@ -235,15 +172,16 @@ public class BlockchainServiceImpl implements BlockchainService {
     /* Settlement                                       */
     /* ------------------------------------------------ */
 
-    @Override
     public String settle(
-            Long exporterBankUserId,
+            String exporterBankActor,
             BigInteger lcTokenId,
             BigInteger blTokenId
     ) {
+
         Function fn = new Function(
                 "settle",
                 List.of(
+                        new Address(exporterBankActor),
                         new Uint256(lcTokenId),
                         new Uint256(blTokenId)
                 ),
@@ -251,11 +189,9 @@ public class BlockchainServiceImpl implements BlockchainService {
         );
 
         return vaultService.signAndSend(
-                exporterBankUserId,
                 managerAddress,
                 FunctionEncoder.encode(fn),
                 BigInteger.ZERO,
-                GAS_LIMIT,
                 GAS_PRICE
         );
     }

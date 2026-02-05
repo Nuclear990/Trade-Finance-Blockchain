@@ -1,4 +1,7 @@
 package com.tradeAnchor.backend.model;
 
-public class TokenStatus {
+public enum TokenStatus {
+    REQUESTED,
+    ISSUED,
+    UTILIZED;
 }

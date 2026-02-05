@@ -13,7 +13,7 @@ public class JwtUtil {
     private SecretKey key = Keys.hmacShaKeyFor(keyString.getBytes());
 
     public String generateAccessToken(String username, String userType){
-        long expiration_time = 1000 * 60 * 5; // 5 mins
+        long expiration_time = 1000 * 60 * 60; // 5 mins
         return Jwts.builder()
                 .setSubject(username)
                 .claim("userType", "ROLE_" + userType)

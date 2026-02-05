@@ -1,4 +1,6 @@
 package com.tradeAnchor.backend.model;
 
-public class TrxnStatus {
+public enum TrxnStatus {
+    ACTIVE,
+    SETTLED;
 }

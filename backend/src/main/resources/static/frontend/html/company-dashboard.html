@@ -19,16 +19,7 @@
 </head>
 <body>
 <button id="test-button">Test</button>
-<script type="module">
-    import { authFetch } from "/frontend/javascript/authState.js";
-
-    document.getElementById('test-button', {method: 'GET'})
-        .addEventListener('click', async () => {
-            const response = await authFetch('/secure/hello');
-            const text = await response.text();
-            console.log(text);
-        });
-</script>
+<script type="module" src="/frontend/javascript/company-dashboard.js"></script>
 
 </body>
 </html>

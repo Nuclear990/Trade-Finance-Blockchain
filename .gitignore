@@ -1,0 +1,6 @@
+.idea/
+target/
+*.class
+.DS_Store
+*.log
+backend/src/test/java/com/tradeAnchor/backend/SimpleEnvCheckTest.java

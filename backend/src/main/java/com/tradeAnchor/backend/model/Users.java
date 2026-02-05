@@ -8,8 +8,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigInteger;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -27,11 +30,13 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private UserType userType;
     private String ethereumAddress;
+    private Set<Long> trxns = new HashSet<>();
 
     public Users(String username, String password, UserType userType) {
         this.username = username;
         this.password = password;
         this.userType = userType;
+        this.trxns = new HashSet<>();
     }
 
     @Override

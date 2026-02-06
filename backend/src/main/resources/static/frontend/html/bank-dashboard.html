@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeAnchor - Bank</title>
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/components.css">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-right {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+
+        .header-right span {
+            font-size: 1.5rem;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .main-container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .action-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-card h2 {
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="header-left">
+            <img src="/images/TradeAnchorLogo.png" alt="TradeAnchor" class="logo-img">
+            <h1>Bank</h1>
+        </div>
+        <div class="header-right">
+            <span id="username-display"></span>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="action-card">
+            <h2>Issue LC</h2>
+            <div class="input-group">
+                <input type="text" id="issueLcTxnId" placeholder="Transaction ID">
+                <button id="btnIssueLc" class="btn btn-primary">Issue LC</button>
+            </div>
+        </section>
+
+        <section class="action-card">
+            <h2>Settle Transaction</h2>
+            <div class="input-group">
+                <input type="text" id="settleTxnId" placeholder="Transaction ID">
+                <button id="btnSettle" class="btn btn-primary">Settle</button>
+            </div>
+        </section>
+
+        <section class="action-card">
+            <h2>Trade Logs</h2>
+            <button id="btnViewLogs" class="btn btn-secondary">View Logs</button>
+        </section>
+    </main>
+
+    <script type="module" src="/frontend/javascript/bank-dashboard.js"></script>
+</body>
+
+</html>

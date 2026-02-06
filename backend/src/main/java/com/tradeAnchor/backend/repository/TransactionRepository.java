@@ -1,12 +1,10 @@
 package com.tradeAnchor.backend.repository;
 
+import com.tradeAnchor.backend.model.TokenStatus;
 import com.tradeAnchor.backend.model.Transaction;
-import com.tradeAnchor.backend.model.TrxnStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
@@ -14,4 +12,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByExporter(String exporter);
 
+    List<Transaction> findByImporterBankAndLcToken_TokenStatus(
+            String importerBank,
+            TokenStatus status);
+
+    List<Transaction> findByLcToken_TokenStatus(TokenStatus status);
+
+    List<Transaction> findByExporterBankAndLcToken_TokenStatusAndBlToken_TokenStatus(
+            String exporterBank,
+            TokenStatus lcStatus,
+            TokenStatus blStatus);
 }

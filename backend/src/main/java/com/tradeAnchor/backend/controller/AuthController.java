@@ -33,125 +33,119 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/public")
 public class AuthController {
-    AuthenticationManager authenticationManager;
-    JwtUtil jwtUtil;
-    UsersRepository usersRepository;
-    RefreshTokenRepository refreshTokenRepository;
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsersRepository usersRepository, RefreshTokenRepository refreshTokenRepository) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.usersRepository = usersRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+        AuthenticationManager authenticationManager;
+        JwtUtil jwtUtil;
+        UsersRepository usersRepository;
+        RefreshTokenRepository refreshTokenRepository;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto u) {
-        try {
-            Authentication authentication =
-                    authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(
-                                    u.getUsername(),
-                                    u.getPassword()
-                            )
-                    );
-
-            Users user = (Users) authentication.getPrincipal();
-            //Refresh token - opaque string
-            String refreshTokenValue = UUID.randomUUID().toString();
-            refreshTokenRepository.save(
-                    new RefreshToken(user.getUsername(), refreshTokenValue, user.getUserType())
-            );
-            // send refresh token as cookie
-            ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshTokenValue)
-                    .httpOnly(true)
-                    .secure(false) // true in prod
-                    .sameSite("Lax")
-                    .path("/")
-                    .maxAge(60L * 60 * 24 * 30)
-                    .build();
-
-            LoginResponseDto dto = new LoginResponseDto(
-                    jwtUtil.generateAccessToken(user.getUsername(), user.getUserType().name()),
-                    user.getUserType()
-            );
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(dto);
-
-        } catch (BadCredentialsException ex) {
-            // WRONG username/password → FORBIDDEN
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
-        }
-    }
-
-
-    @PostMapping("/refresh")
-    public ResponseEntity<LoginResponseDto> refresh(
-            @CookieValue(name = "RefreshToken", required = false) String token
-    ) {
-        if (token == null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing refresh token");
+        public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+                        UsersRepository usersRepository, RefreshTokenRepository refreshTokenRepository) {
+                this.authenticationManager = authenticationManager;
+                this.jwtUtil = jwtUtil;
+                this.usersRepository = usersRepository;
+                this.refreshTokenRepository = refreshTokenRepository;
         }
 
-        RefreshToken tokenEntity =
-                refreshTokenRepository.findByToken(token)
-                        .orElseThrow(() ->
-                                new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid refresh token")
-                        );
-// expired token - normal case
-        if (tokenEntity.getExp().isBefore(Instant.now())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token expired");
+        @PostMapping("/login")
+        public ResponseEntity<LoginResponseDto> login(@RequestBody UserDto u) {
+                try {
+                        Authentication authentication = authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(
+                                                        u.getUsername(),
+                                                        u.getPassword()));
+
+                        Users user = (Users) authentication.getPrincipal();
+                        // Refresh token - opaque string
+                        String refreshTokenValue = UUID.randomUUID().toString();
+                        refreshTokenRepository.save(
+                                        new RefreshToken(user.getUsername(), refreshTokenValue, user.getUserType()));
+                        // send refresh token as cookie
+                        ResponseCookie cookie = ResponseCookie.from("RefreshToken", refreshTokenValue)
+                                        .httpOnly(true)
+                                        .secure(false) // true in prod
+                                        .sameSite("Lax")
+                                        .path("/")
+                                        .maxAge(60L * 60 * 24 * 30)
+                                        .build();
+
+                        LoginResponseDto dto = new LoginResponseDto(
+                                        jwtUtil.generateAccessToken(user.getUsername(), user.getUserType().name()),
+                                        user.getUserType(),
+                                        user.getUsername());
+
+                        return ResponseEntity.ok()
+                                        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                        .body(dto);
+
+                } catch (BadCredentialsException ex) {
+                        // WRONG username/password → FORBIDDEN
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
+                }
         }
-// token reuse - security issue
-        if (tokenEntity.getRevoked()) {
-            refreshTokenRepository.revokeAllForUsername(tokenEntity.getUsername());
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token reuse detected");
+
+        @PostMapping("/refresh")
+        public ResponseEntity<LoginResponseDto> refresh(
+                        @CookieValue(name = "RefreshToken", required = false) String token) {
+                if (token == null) {
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing refresh token");
+                }
+
+                RefreshToken tokenEntity = refreshTokenRepository.findByToken(token)
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN,
+                                                "Invalid refresh token"));
+                // expired token - normal case
+                if (tokenEntity.getExp().isBefore(Instant.now())) {
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token expired");
+                }
+                // token reuse - security issue
+                if (tokenEntity.getRevoked()) {
+                        refreshTokenRepository.revokeAllForUsername(tokenEntity.getUsername());
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Refresh token reuse detected");
+                }
+
+                // rotate refresh token
+                tokenEntity.setRevoked(true);
+                tokenEntity.setExp(Instant.now());
+                refreshTokenRepository.save(tokenEntity);
+
+                String newRefreshToken = UUID.randomUUID().toString();
+                refreshTokenRepository.save(
+                                new RefreshToken(tokenEntity.getUsername(), newRefreshToken,
+                                                tokenEntity.getUserType()));
+
+                ResponseCookie cookie = ResponseCookie.from("RefreshToken", newRefreshToken)
+                                .httpOnly(true)
+                                .secure(false) // true in prod
+                                .sameSite("Lax")
+                                .path("/")
+                                .maxAge(60L * 60 * 24 * 30)
+                                .build();
+
+                LoginResponseDto dto = new LoginResponseDto(
+                                jwtUtil.generateAccessToken(tokenEntity.getUsername(),
+                                                tokenEntity.getUserType().name()),
+                                tokenEntity.getUserType(),
+                                tokenEntity.getUsername());
+
+                return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                .body(dto);
         }
 
-        // rotate refresh token
-        tokenEntity.setRevoked(true);
-        tokenEntity.setExp(Instant.now());
-        refreshTokenRepository.save(tokenEntity);
-
-        String newRefreshToken = UUID.randomUUID().toString();
-        refreshTokenRepository.save(
-                new RefreshToken(tokenEntity.getUsername(), newRefreshToken, tokenEntity.getUserType())
-        );
-
-        ResponseCookie cookie = ResponseCookie.from("RefreshToken", newRefreshToken)
-                .httpOnly(true)
-                .secure(false) // true in prod
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(60L * 60 * 24 * 30)
-                .build();
-
-        LoginResponseDto dto = new LoginResponseDto(
-                jwtUtil.generateAccessToken(
-                        tokenEntity.getUsername(),
-                        tokenEntity.getUserType().name()
-                ),
-                tokenEntity.getUserType()
-        );
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(dto);
-    }
-
-
-    @GetMapping("/logout")
-    public ResponseEntity<Void> logout(@CookieValue("RefreshToken") String rt){
-        refreshTokenRepository.findByToken(rt).ifPresent(tokenEntity -> refreshTokenRepository.revokeAndExpireAllForUsername(tokenEntity.getUsername(), Instant.now().plusSeconds(60L * 60 * 24 * 7)));
-        ResponseCookie deleteCookie = ResponseCookie.from("RefreshToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .build();
-        return ResponseEntity.noContent()
-                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
-                .build();
-    }
+        @GetMapping("/logout")
+        public ResponseEntity<Void> logout(@CookieValue("RefreshToken") String rt) {
+                refreshTokenRepository.findByToken(rt)
+                                .ifPresent(tokenEntity -> refreshTokenRepository.revokeAndExpireAllForUsername(
+                                                tokenEntity.getUsername(),
+                                                Instant.now().plusSeconds(60L * 60 * 24 * 7)));
+                ResponseCookie deleteCookie = ResponseCookie.from("RefreshToken", "")
+                                .httpOnly(true)
+                                .secure(false)
+                                .path("/")
+                                .maxAge(0)
+                                .build();
+                return ResponseEntity.noContent()
+                                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
+                                .build();
+        }
 }

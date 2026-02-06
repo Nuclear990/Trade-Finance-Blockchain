@@ -13,4 +13,5 @@ import lombok.Setter;
 public class LoginResponseDto {
     String accessToken;
     UserType userType;
+    String username;
 }

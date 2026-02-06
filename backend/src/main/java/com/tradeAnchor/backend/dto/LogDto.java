@@ -1,6 +1,7 @@
 package com.tradeAnchor.backend.dto;
 
 import com.tradeAnchor.backend.model.TokenStatus;
+import com.tradeAnchor.backend.model.TrxnStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 public class LogDto {
     private Long trxnId;
+    private TrxnStatus status;
     private TokenStatus lcToken;
     private TokenStatus blToken;
     private String importer;

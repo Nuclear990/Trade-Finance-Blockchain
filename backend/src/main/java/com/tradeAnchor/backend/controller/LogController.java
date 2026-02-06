@@ -71,7 +71,7 @@ public class LogController {
         List<LogDto> logs = transactions.stream()
                 .map(txn -> new LogDto(
                         txn.getTrxnId(),
-
+txn.getTrxnStatus(),
                         txn.getLcToken() != null
                                 ? txn.getLcToken().getTokenStatus()
                                 : null,

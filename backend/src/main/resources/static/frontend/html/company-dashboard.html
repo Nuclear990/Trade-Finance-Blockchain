@@ -1,25 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeAnchor-Login</title>
-    <!-- <link rel="stylesheet" href="/frontend/css/company-dashboard.css"> -->
+    <title>TradeAnchor - Company</title>
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/components.css">
     <style>
-        #test-button {
-            background-color: blue;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 20px;
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header-right span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding-right:10px;
+        }
+
+        .main-container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .action-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-card h2 {
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
         }
     </style>
 </head>
-<body>
-<button id="test-button">Test</button>
-<script type="module" src="/frontend/javascript/company-dashboard.js"></script>
 
+<body>
+    <header class="header-container">
+        <div class="header-left">
+            <img src="/images/TradeAnchorLogo.png" alt="TradeAnchor" class="logo-img">
+            <h1>Company</h1>
+        </div>
+        <div class="header-right">
+            <span id="username-display"></span>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Request LC -->
+        <section class="action-card">
+            <h2>Request Letter of Credit</h2>
+            <form id="lcForm">
+                <div class="form-group">
+                    <label>Exporter (Username)</label>
+                    <input type="text" id="lcCompany" required placeholder="e.g. company_user">
+                </div>
+                <div class="form-group">
+                    <label>Exporter Bank (Username)</label>
+                    <input type="text" id="lcExporterBank" required placeholder="e.g. bank_user_2">
+                </div>
+                <div class="form-group">
+                    <label>Importer Bank (Username)</label>
+                    <input type="text" id="lcImporterBank" required placeholder="e.g. bank_user_1">
+                </div>
+                <div class="form-group">
+                    <label>Shipper (Username)</label>
+                    <input type="text" id="lcShipper" required placeholder="e.g. shipper_user">
+                </div>
+                <div class="form-group">
+                    <label>Amount ($)</label>
+                    <input type="number" id="lcAmount" required placeholder="10000">
+                </div>
+                <div class="form-group">
+                    <label>Goods Quantity</label>
+                    <input type="number" id="lcGoods" required placeholder="100">
+                </div>
+                <button type="button" id="btnRequestLc" class="btn btn-primary">Request LC</button>
+            </form>
+        </section>
+
+        <!-- Request BL -->
+        <section class="action-card">
+            <h2>Request Bill of Lading</h2>
+            <div class="input-group">
+                <input type="text" id="blTrxnId" placeholder="Transaction ID (from LC)">
+                <button id="btnRequestBl" class="btn btn-primary">Request BL</button>
+            </div>
+        </section>
+
+        <!-- Logs -->
+        <section class="action-card">
+            <h2>Trade Logs</h2>
+            <button id="btnViewLogs" class="btn btn-secondary">View Logs</button>
+        </section>
+    </main>
+
+    <script type="module" src="/frontend/javascript/company-dashboard.js"></script>
 </body>
+
 </html>

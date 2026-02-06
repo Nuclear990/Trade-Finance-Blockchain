@@ -28,11 +28,11 @@ export async function authFetch(url, options = {}) {
     });
 
     /* ---------------- HARD FAIL ---------------- */
-    if (response.status === 403) {
-        // 403 == forbidden, NOT refreshable
-        forceLogout();
-        return;
-    }
+    // if (response.status === 403) {
+    //     // 403 == forbidden, but we might want to show message instead of logout
+    //     // forceLogout();
+    //     // return;
+    // }
 
     /* ---------------- SUCCESS ---------------- */
     if (response.status !== 401) {
@@ -99,11 +99,11 @@ function forceLogout() {
 }
 
 export async function bootstrap() {
-           const ok = await refreshAccessToken();
+    const ok = await refreshAccessToken();
 
-           if (!ok) {
-               window.location.replace("/frontend/html/index.html");
-               return;
-           }
-       }
+    if (!ok) {
+        window.location.replace("/frontend/html/index.html");
+        return;
+    }
+}
 

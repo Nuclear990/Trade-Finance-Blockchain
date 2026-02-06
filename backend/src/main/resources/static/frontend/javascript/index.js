@@ -23,17 +23,18 @@ form.addEventListener('submit', async e => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            "username" : username.value,
-            "password" : password.value
+            "username": username.value,
+            "password": password.value
         })
     });
-let invalidElement = document.querySelector("#invalidCredentials");
+    let invalidElement = document.querySelector("#invalidCredentials");
     if (!res.ok) {
         showError(invalidElement, 'Invalid credentials');
         return;
     }
 
     const data = await res.json();
+    localStorage.setItem('username', data.username);
 
     const map = {
         BANK: 'bank-dashboard.html',

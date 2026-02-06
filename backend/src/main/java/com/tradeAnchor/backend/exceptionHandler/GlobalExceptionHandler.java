@@ -17,6 +17,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -32,6 +33,11 @@ public class GlobalExceptionHandler {
                 .body("Username already taken");
     }
 
+    @ExceptionHandler(java.util.NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElement() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
+    }
+
     @ExceptionHandler(WalletCreationException.class)
     public ResponseEntity<String> handleWalletFailure() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -44,6 +50,21 @@ public class GlobalExceptionHandler {
                 .body("Invalid username or password");
     }
 
+    @ExceptionHandler(com.tradeAnchor.backend.exception.ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(com.tradeAnchor.backend.exception.ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(com.tradeAnchor.backend.exception.ForbiddenException.class)
+    public ResponseEntity<String> handleForbidden(com.tradeAnchor.backend.exception.ForbiddenException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(com.tradeAnchor.backend.exception.ConflictException.class)
+    public ResponseEntity<String> handleConflict(com.tradeAnchor.backend.exception.ConflictException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(
             MethodArgumentNotValidException ex) {
@@ -52,8 +73,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors()
                 .forEach(err -> errors.put(
                         err.getField(),
-                        err.getDefaultMessage()
-                ));
+                        err.getDefaultMessage()));
 
         return ResponseEntity.badRequest().body(errors);
     }
@@ -65,8 +85,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    private static final Logger log =
-            LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneric(Exception ex) {
@@ -75,5 +94,3 @@ public class GlobalExceptionHandler {
                 .body("Internal server error");
     }
 }
-
-

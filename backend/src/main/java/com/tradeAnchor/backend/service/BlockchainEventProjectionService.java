@@ -10,97 +10,86 @@ import java.math.BigInteger;
 @Service
 public class BlockchainEventProjectionService {
 
-    private final TransactionRepository transactionRepository;
-    private final LcTokenRepository lcTokenRepository;
-    private final BlTokenRepository blTokenRepository;
+        private final TransactionRepository transactionRepository;
+        private final LcTokenRepository lcTokenRepository;
+        private final BlTokenRepository blTokenRepository;
 
-    public BlockchainEventProjectionService(
-            TransactionRepository transactionRepository,
-            LcTokenRepository lcTokenRepository,
-            BlTokenRepository blTokenRepository
-    ) {
-        this.transactionRepository = transactionRepository;
-        this.lcTokenRepository = lcTokenRepository;
-        this.blTokenRepository = blTokenRepository;
-    }
-
-    /* ===================== LC ISSUED ===================== */
-
-    @Transactional
-    public void onLcIssued(BigInteger onChainLcId, Long txnId) {
-        Transaction txn = transactionRepository
-                .findById(txnId)
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "Transaction not found for txnId=" + txnId
-                        )
-                );
-
-        LcToken lc = txn.getLcToken();
-
-        if (lc.getTokenStatus() == TokenStatus.ISSUED) {
-            return; // idempotent
+        public BlockchainEventProjectionService(
+                        TransactionRepository transactionRepository,
+                        LcTokenRepository lcTokenRepository,
+                        BlTokenRepository blTokenRepository) {
+                this.transactionRepository = transactionRepository;
+                this.lcTokenRepository = lcTokenRepository;
+                this.blTokenRepository = blTokenRepository;
         }
 
-        lc.setOnChainLcId(onChainLcId);
-        lc.setTokenStatus(TokenStatus.ISSUED);
+        /* ===================== LC ISSUED ===================== */
 
-        lcTokenRepository.save(lc);
-    }
+        @Transactional
+        public void onLcIssued(BigInteger onChainLcId, Long txnId) {
+                Transaction txn = transactionRepository
+                                .findById(txnId)
+                                .orElseThrow(() -> new IllegalStateException(
+                                                "Transaction not found for txnId=" + txnId));
 
-    /* ===================== BL ISSUED ===================== */
+                LcToken lc = txn.getLcToken();
 
-    @Transactional
-    public void onBlIssued(BigInteger onChainBlId, Long txnId) {
+                if (lc.getTokenStatus() == TokenStatus.ISSUED) {
+                        return; // idempotent
+                }
 
-        Transaction txn = transactionRepository
-                .findById(txnId)
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "Transaction not found for txnId=" + txnId
-                        )
-                );
+                lc.setOnChainLcId(onChainLcId);
+                lc.setTokenStatus(TokenStatus.ISSUED);
 
-        BlToken bl = txn.getBlToken();
-
-        if (bl == null) {
-            throw new IllegalStateException(
-                    "BL not requested for txnId=" + txnId
-            );
+                lcTokenRepository.save(lc);
         }
 
-        if (bl.getTokenStatus() == TokenStatus.ISSUED) {
-            return; // idempotent
+        /* ===================== BL ISSUED ===================== */
+
+        @Transactional
+        public void onBlIssued(BigInteger onChainBlId, Long txnId) {
+
+                Transaction txn = transactionRepository
+                                .findById(txnId)
+                                .orElseThrow(() -> new IllegalStateException(
+                                                "Transaction not found for txnId=" + txnId));
+
+                BlToken bl = txn.getBlToken();
+
+                if (bl == null) {
+                        throw new IllegalStateException(
+                                        "BL not requested for txnId=" + txnId);
+                }
+
+                if (bl.getTokenStatus() == TokenStatus.ISSUED) {
+                        return; // idempotent
+                }
+
+                bl.setOnChainBlId(onChainBlId);
+                bl.setTokenStatus(TokenStatus.ISSUED);
+
+                blTokenRepository.save(bl);
         }
 
-        bl.setOnChainBlId(onChainBlId);
-        bl.setTokenStatus(TokenStatus.ISSUED);
+        /* ===================== SETTLED ===================== */
 
-        blTokenRepository.save(bl);
-    }
+        @Transactional
+        public void onSettled(Long txnId) {
 
-    /* ===================== SETTLED ===================== */
+                Transaction txn = transactionRepository
+                                .findById(txnId)
+                                .orElseThrow(() -> new IllegalStateException(
+                                                "Transaction not found for txnId=" + txnId));
 
-    @Transactional
-    public void onSettled(Long txnId) {
+                if (txn.getTrxnStatus() == TrxnStatus.SETTLED) {
+                        return; // idempotent
+                }
 
-        Transaction txn = transactionRepository
-                .findById(txnId)
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "Transaction not found for txnId=" + txnId
-                        )
-                );
+                txn.setTrxnStatus(TrxnStatus.SETTLED);
 
-        if (txn.getTrxnStatus() == TrxnStatus.SETTLED) {
-            return; // idempotent
+                txn.getLcToken().setTokenStatus(TokenStatus.UTILIZED);
+                txn.getBlToken().setTokenStatus(TokenStatus.UTILIZED);
+
+                transactionRepository.save(txn);
         }
-
-        txn.setTrxnStatus(TrxnStatus.SETTLED);
-
-        txn.getLcToken().setTokenStatus(TokenStatus.UTILIZED);
-        txn.getBlToken().setTokenStatus(TokenStatus.UTILIZED);
-
-        transactionRepository.save(txn);
-    }
 }

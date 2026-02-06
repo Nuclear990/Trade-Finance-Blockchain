@@ -14,6 +14,16 @@ public class Web3Config {
 
     @Bean
     public Web3j web3j() {
+        if (rpcUrl != null && (rpcUrl.startsWith("wss://") || rpcUrl.startsWith("ws://"))) {
+            try {
+                org.web3j.protocol.websocket.WebSocketService webSocketService = new org.web3j.protocol.websocket.WebSocketService(
+                        rpcUrl, true);
+                webSocketService.connect();
+                return Web3j.build(webSocketService);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to connect to WebSocket RPC", e);
+            }
+        }
         return Web3j.build(new HttpService(rpcUrl));
     }
 }

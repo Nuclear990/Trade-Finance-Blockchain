@@ -23,4 +23,3 @@ Initialized: true
 Sealed: false
 Seal Type: transit
 
- token      = "YOUR_VAULT_TOKEN"
